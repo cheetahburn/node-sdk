@@ -84,33 +84,10 @@ export async function agentCreatePermissions(
     EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
   >,
 ): Promise<boolean> {
-  /* const batch = {
-    batch: permissions.map(permission => ({
-      objectID: objectId,
-      objectType,
-      restrictions: [],
-      role: 'permission',
-    })),
-  }*/
-
-  // return client.userCreatePermission(agentId, batch as any) as any
-
   return client.userCreatePermissionBatch(agentId, {
     objectId,
     objectType,
     restrictions: [],
     roles: permissions,
   })
-
-  /*
-    Promise.all(
-      permissions.map(async permission =>
-        client.userCreatePermission(agentId, {
-          objectId,
-          objectType,
-          restrictions: [],
-          role: permission,
-        }),
-      ),
-    )*/
 }

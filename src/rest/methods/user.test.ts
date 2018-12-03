@@ -294,20 +294,11 @@ describe('userGetUtilisationPeriods()', () => {
         restrictions: [],
         role: EnumRopeUserPermissionRole.serviceCentreAgent,
       }
-      const permissionData2 = {
-        objectId: APP_ID,
-        objectType: EnumUserPermissionObjectType.app,
-        restrictions: [],
-        role: EnumRopeUserPermissionRole.cockpitManager,
-      }
 
-      const result = Promise.all([
-        await client.userCreatePermission(user.id, permissionData),
-        await client.userCreatePermission(user.id, permissionData2),
-      ])
+      const result = await client.userCreatePermission(user.id, permissionData)
 
-      //   expect(result.role).toEqual(permissionData.role)
-      // expect(result.objectType).toEqual(permissionData.objectType)
+      expect(result.role).toEqual(permissionData.role)
+      expect(result.objectType).toEqual(permissionData.objectType)
     })
   })
 })
