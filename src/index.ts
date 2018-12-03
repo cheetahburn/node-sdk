@@ -1,8 +1,9 @@
 export {
   default as restClient,
+  EnumLegacyUserPermissionRole,
+  EnumRopeUserPermissionRole,
   EnumUnitType,
   EnumUserPermissionObjectType,
-  EnumUserPermissionRole,
 } from './rest'
 export {
   EnumCountryCode,

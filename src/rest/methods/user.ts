@@ -49,7 +49,7 @@ export type UserResultList = Promise<{
   readonly total: number
 }>
 
-export enum EnumUserPermissionRole {
+export enum EnumLegacyUserPermissionRole {
   admin = 'admin',
   articleAdmin = 'article-admin',
   assetAdmin = 'asset-admin',
@@ -57,6 +57,35 @@ export enum EnumUserPermissionRole {
   documentAdmin = 'document-admin',
   externalTicketCollaborator = 'external-ticket-collaborator',
   pinboardAdmin = 'community-article-admin',
+}
+
+export enum EnumRopeUserPermissionRole {
+  appAdmin = 'app-admin',
+  appOwner = 'app-owner',
+  articleAdmin = 'article-admin',
+  articlesAgent = 'articles-agent',
+  bookableAssetAgent = 'bookable-asset-agent',
+  bookingAgent = 'booking-agent',
+  cockpitAdmin = 'cockpit-admin',
+  cockpitManager = 'cockpit-manager',
+  // communityArticleAdmin = 'community-article-admin',
+  dataConnectorAdmin = 'data-connector-admin',
+  // documentAdmin = 'document-admin',
+  globalOrganizationAdmin = 'global-organization-admin',
+  moderator = 'moderator',
+  orgAgent = 'org-agent',
+  orgTeamManager = 'org-team-manager',
+  organizationAdmin = 'organization-admin',
+  pinboardAgent = 'pinboard-agent',
+  platformOwner = 'platform-owner',
+  qa = 'qa',
+  serviceCentreAgent = 'service-centre-agent',
+  serviceCentreManager = 'service-centre-manager',
+  setup = 'setup-admin',
+  taskAdmin = 'task-admin',
+  tenantManager = 'tenant-manager',
+  ticketAdmin = 'ticket-admin',
+  userAddresses = 'user-addresses',
 }
 
 export enum EnumUserPermissionObjectType {
@@ -198,7 +227,7 @@ export type MethodUserCreatePermission = (
     readonly objectId: string
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
-    readonly role: EnumUserPermissionRole
+    readonly role: EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
   },
 ) => UserPermissionResult
 
@@ -209,7 +238,7 @@ export async function userCreatePermission(
     readonly objectId: string
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
-    readonly role: EnumUserPermissionRole
+    readonly role: EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
   },
 ): UserPermissionResult {
   const { objectId: objectID, ...rest } = data
@@ -225,14 +254,56 @@ export async function userCreatePermission(
 }
 
 /*
+  Create a new permission for a user
+*/
+
+export type MethodUserCreatePermissionBatch = (
+  userId: string,
+  permission: PartialUserPermission & {
+    readonly objectId: string
+    readonly objectType: EnumUserPermissionObjectType
+    readonly restrictions: ReadonlyArray<object>
+    readonly roles: ReadonlyArray<
+      EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
+    >
+  },
+) => Promise<boolean>
+
+export async function userCreatePermissionBatch(
+  client: InterfaceAllthingsRestClient,
+  userId: string,
+  data: PartialUserPermission & {
+    readonly objectId: string
+    readonly objectType: EnumUserPermissionObjectType
+    readonly restrictions: ReadonlyArray<object>
+    readonly roles: ReadonlyArray<
+      EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
+    >
+  },
+): Promise<boolean> {
+  const { objectId, objectType, roles } = data
+
+  const batch = {
+    batch: roles.map(role => ({
+      objectID: objectId,
+      objectType,
+      restrictions: [],
+      role,
+    })),
+  }
+
+  return !(await client.post(`/v1/users/${userId}/permissions`, batch))
+}
+
+/*
   Get a list of a user's permissions
 */
 
-export type MethodUserFindPermissions = (
+export type MethodUserGetPermissions = (
   userId: string,
 ) => Promise<ReadonlyArray<IUserPermission>>
 
-export async function userFindPermissions(
+export async function userGetPermissions(
   client: InterfaceAllthingsRestClient,
   userId: string,
 ): Promise<ReadonlyArray<IUserPermission>> {

@@ -1,8 +1,9 @@
 import generateId from 'nanoid'
 import { EnumLocale, InterfaceAllthingsRestClient } from '../types'
 import {
+  EnumLegacyUserPermissionRole,
+  EnumRopeUserPermissionRole,
   EnumUserPermissionObjectType,
-  EnumUserPermissionRole,
   EnumUserType,
   IUserPermission,
   PartialUser,
@@ -66,8 +67,10 @@ export type MethodAgentCreatePermissions = (
   agentId: string,
   objectId: string,
   objectType: EnumUserPermissionObjectType,
-  permissions: ReadonlyArray<EnumUserPermissionRole>,
-) => AgentPermissionsResult
+  permissions: ReadonlyArray<
+    EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
+  >,
+) => Promise<boolean>
 
 /**
  * Returns a datastore-specific object of redis clients.
@@ -77,16 +80,37 @@ export async function agentCreatePermissions(
   agentId: string,
   objectId: string,
   objectType: EnumUserPermissionObjectType,
-  permissions: ReadonlyArray<EnumUserPermissionRole>,
-): AgentPermissionsResult {
-  return Promise.all(
-    permissions.map(async permission =>
-      client.userCreatePermission(agentId, {
-        objectId,
-        objectType,
-        restrictions: [],
-        role: permission,
-      }),
-    ),
-  )
+  permissions: ReadonlyArray<
+    EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
+  >,
+): Promise<boolean> {
+  /* const batch = {
+    batch: permissions.map(permission => ({
+      objectID: objectId,
+      objectType,
+      restrictions: [],
+      role: 'permission',
+    })),
+  }*/
+
+  // return client.userCreatePermission(agentId, batch as any) as any
+
+  return client.userCreatePermissionBatch(agentId, {
+    objectId,
+    objectType,
+    restrictions: [],
+    roles: permissions,
+  })
+
+  /*
+    Promise.all(
+      permissions.map(async permission =>
+        client.userCreatePermission(agentId, {
+          objectId,
+          objectType,
+          restrictions: [],
+          role: permission,
+        }),
+      ),
+    )*/
 }

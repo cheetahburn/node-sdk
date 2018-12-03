@@ -5,7 +5,11 @@ import { APP_ID, APP_PROPERTY_MANAGER_ID } from '../../../test/constants'
 import { times } from '../../utils/functional'
 import { EnumLocale, EnumTimezone } from '../types'
 import { EnumUnitType } from './unit'
-import { EnumUserPermissionObjectType, EnumUserPermissionRole } from './user'
+import {
+  EnumLegacyUserPermissionRole,
+  EnumRopeUserPermissionRole,
+  EnumUserPermissionObjectType,
+} from './user'
 
 const client = restClient()
 
@@ -139,7 +143,7 @@ describe('userCreatePermission()', () => {
       objectId: APP_ID,
       objectType: EnumUserPermissionObjectType.app,
       restrictions: [],
-      role: EnumUserPermissionRole.admin,
+      role: EnumLegacyUserPermissionRole.admin,
     }
 
     const result = await client.userCreatePermission(user.id, permissionData)
@@ -149,7 +153,7 @@ describe('userCreatePermission()', () => {
   })
 })
 
-describe('userFindPermissions()', () => {
+describe('userGetPermissions()', () => {
   it('should be able to list permissions of a user', async () => {
     const initialData = {
       ...testData,
@@ -168,12 +172,12 @@ describe('userFindPermissions()', () => {
       objectId: APP_ID,
       objectType: EnumUserPermissionObjectType.app,
       restrictions: [],
-      role: EnumUserPermissionRole.admin,
+      role: EnumLegacyUserPermissionRole.admin,
     }
 
     await client.userCreatePermission(user.id, permissionData)
 
-    const result = await client.userFindPermissions(user.id)
+    const result = await client.userGetPermissions(user.id)
 
     expect(result).toHaveLength(1)
     expect(result[0].objectType).toEqual(permissionData.objectType)
@@ -199,7 +203,7 @@ describe('userDeletePermission()', () => {
       objectId: APP_ID,
       objectType: EnumUserPermissionObjectType.app,
       restrictions: [],
-      role: EnumUserPermissionRole.admin,
+      role: EnumLegacyUserPermissionRole.admin,
     }
 
     const permission = await client.userCreatePermission(
@@ -208,13 +212,13 @@ describe('userDeletePermission()', () => {
     )
 
     // permission should exist
-    expect(await client.userFindPermissions(user.id)).toHaveLength(1)
+    expect(await client.userGetPermissions(user.id)).toHaveLength(1)
 
     // delete the permission
     expect(await client.userDeletePermission(permission.id)).toBe(true)
 
     // permission should no longer exist
-    expect(await client.userFindPermissions(user.id)).toHaveLength(0)
+    expect(await client.userGetPermissions(user.id)).toHaveLength(0)
   })
 })
 
@@ -265,5 +269,45 @@ describe('userGetUtilisationPeriods()', () => {
     )
 
     expect(usersUtilisationPeriod.id).toEqual(utilisationPeriod.id)
+  })
+
+  describe('userCreatePermission()', () => {
+    it('should be able to add rope permissions to a user', async () => {
+      const initialData = {
+        ...testData,
+        email: generateId() + '@foobar.test',
+        externalId: generateId(),
+      }
+      const user = await client.userCreate(
+        APP_ID,
+        generateId(),
+        generateId(),
+        initialData,
+      )
+
+      expect(user.email).toEqual(initialData.email)
+      expect(user.externalId).toEqual(initialData.externalId)
+
+      const permissionData = {
+        objectId: APP_ID,
+        objectType: EnumUserPermissionObjectType.app,
+        restrictions: [],
+        role: EnumRopeUserPermissionRole.serviceCentreAgent,
+      }
+      const permissionData2 = {
+        objectId: APP_ID,
+        objectType: EnumUserPermissionObjectType.app,
+        restrictions: [],
+        role: EnumRopeUserPermissionRole.cockpitManager,
+      }
+
+      const result = Promise.all([
+        await client.userCreatePermission(user.id, permissionData),
+        await client.userCreatePermission(user.id, permissionData2),
+      ])
+
+      //   expect(result.role).toEqual(permissionData.role)
+      // expect(result.objectType).toEqual(permissionData.objectType)
+    })
   })
 })

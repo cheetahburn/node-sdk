@@ -36,16 +36,18 @@ import {
   unitUpdateById,
 } from './methods/unit'
 import {
+  EnumLegacyUserPermissionRole,
+  EnumRopeUserPermissionRole,
   EnumUserPermissionObjectType,
-  EnumUserPermissionRole,
   getCurrentUser,
   getUsers,
   userCheckInToUtilisationPeriod,
   userCreate,
   userCreatePermission,
+  userCreatePermissionBatch,
   userDeletePermission,
-  userFindPermissions,
   userGetById,
+  userGetPermissions,
   userGetUtilisationPeriods,
   userUpdateById,
 } from './methods/user'
@@ -116,7 +118,8 @@ const API_METHODS: ReadonlyArray<any> = [
   userGetById,
   userUpdateById,
   userCreatePermission,
-  userFindPermissions,
+  userCreatePermissionBatch,
+  userGetPermissions,
   userDeletePermission,
   userCheckInToUtilisationPeriod,
   userGetUtilisationPeriods,
@@ -131,7 +134,12 @@ const API_METHODS: ReadonlyArray<any> = [
   utilisationPeriodCheckOutUser,
 ]
 
-export { EnumUnitType, EnumUserPermissionObjectType, EnumUserPermissionRole }
+export {
+  EnumLegacyUserPermissionRole,
+  EnumRopeUserPermissionRole,
+  EnumUnitType,
+  EnumUserPermissionObjectType,
+}
 
 /*
   The API wrapper
