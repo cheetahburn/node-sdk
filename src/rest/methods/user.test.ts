@@ -5,11 +5,7 @@ import { APP_ID, APP_PROPERTY_MANAGER_ID } from '../../../test/constants'
 import { times } from '../../utils/functional'
 import { EnumLocale, EnumTimezone } from '../types'
 import { EnumUnitType } from './unit'
-import {
-  EnumLegacyUserPermissionRole,
-  EnumRopeUserPermissionRole,
-  EnumUserPermissionObjectType,
-} from './user'
+import { EnumUserPermissionObjectType, EnumUserPermissionRole } from './user'
 
 const client = restClient()
 
@@ -143,7 +139,7 @@ describe('userCreatePermission()', () => {
       objectId: APP_ID,
       objectType: EnumUserPermissionObjectType.app,
       restrictions: [],
-      role: EnumLegacyUserPermissionRole.admin,
+      role: EnumUserPermissionRole.appAdmin,
     }
 
     const result = await client.userCreatePermission(user.id, permissionData)
@@ -172,7 +168,7 @@ describe('userGetPermissions()', () => {
       objectId: APP_ID,
       objectType: EnumUserPermissionObjectType.app,
       restrictions: [],
-      role: EnumLegacyUserPermissionRole.admin,
+      role: EnumUserPermissionRole.appAdmin,
     }
 
     await client.userCreatePermission(user.id, permissionData)
@@ -203,7 +199,7 @@ describe('userDeletePermission()', () => {
       objectId: APP_ID,
       objectType: EnumUserPermissionObjectType.app,
       restrictions: [],
-      role: EnumLegacyUserPermissionRole.admin,
+      role: EnumUserPermissionRole.appAdmin,
     }
 
     const permission = await client.userCreatePermission(
@@ -292,7 +288,7 @@ describe('userGetUtilisationPeriods()', () => {
         objectId: APP_ID,
         objectType: EnumUserPermissionObjectType.app,
         restrictions: [],
-        role: EnumRopeUserPermissionRole.serviceCentreAgent,
+        role: EnumUserPermissionRole.serviceCentreAgent,
       }
 
       const result = await client.userCreatePermission(user.id, permissionData)

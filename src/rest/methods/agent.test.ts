@@ -4,8 +4,8 @@ import restClient from '..'
 import { APP_ID, APP_PROPERTY_MANAGER_ID } from '../../../test/constants'
 import { EnumLocale, EnumTimezone } from '../types'
 import {
-  EnumLegacyUserPermissionRole,
   EnumUserPermissionObjectType,
+  EnumUserPermissionRole,
   EnumUserType,
 } from './user'
 
@@ -75,10 +75,7 @@ describe('agentCreatePermissions()', () => {
       agent.id,
       APP_ID,
       EnumUserPermissionObjectType.app,
-      [
-        EnumLegacyUserPermissionRole.admin,
-        EnumLegacyUserPermissionRole.pinboardAdmin,
-      ],
+      [EnumUserPermissionRole.appAdmin, EnumUserPermissionRole.pinboardAgent],
     )
 
     expect(agentAppPermissionResult).toBeTruthy()
@@ -93,8 +90,8 @@ describe('agentCreatePermissions()', () => {
       property.id,
       EnumUserPermissionObjectType.property,
       [
-        EnumLegacyUserPermissionRole.documentAdmin,
-        EnumLegacyUserPermissionRole.articleAdmin,
+        EnumUserPermissionRole.bookingAgent,
+        EnumUserPermissionRole.articleAdmin,
       ],
     )
 
@@ -105,10 +102,10 @@ describe('agentCreatePermissions()', () => {
     expect(agentPermissions).toHaveLength(4)
 
     const permissionsAddedToAgent: ReadonlyArray<any> = [
-      EnumLegacyUserPermissionRole.admin,
-      EnumLegacyUserPermissionRole.pinboardAdmin,
-      EnumLegacyUserPermissionRole.documentAdmin,
-      EnumLegacyUserPermissionRole.articleAdmin,
+      EnumUserPermissionRole.appAdmin,
+      EnumUserPermissionRole.pinboardAgent,
+      EnumUserPermissionRole.bookingAgent,
+      EnumUserPermissionRole.articleAdmin,
     ]
 
     agentPermissions.forEach(permission => {

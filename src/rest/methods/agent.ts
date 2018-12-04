@@ -1,9 +1,8 @@
 import generateId from 'nanoid'
 import { EnumLocale, InterfaceAllthingsRestClient } from '../types'
 import {
-  EnumLegacyUserPermissionRole,
-  EnumRopeUserPermissionRole,
   EnumUserPermissionObjectType,
+  EnumUserPermissionRole,
   EnumUserType,
   IUserPermission,
   PartialUser,
@@ -67,9 +66,7 @@ export type MethodAgentCreatePermissions = (
   agentId: string,
   objectId: string,
   objectType: EnumUserPermissionObjectType,
-  permissions: ReadonlyArray<
-    EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
-  >,
+  permissions: ReadonlyArray<EnumUserPermissionRole>,
 ) => Promise<boolean>
 
 /**
@@ -80,9 +77,7 @@ export async function agentCreatePermissions(
   agentId: string,
   objectId: string,
   objectType: EnumUserPermissionObjectType,
-  permissions: ReadonlyArray<
-    EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
-  >,
+  permissions: ReadonlyArray<EnumUserPermissionRole>,
 ): Promise<boolean> {
   return client.userCreatePermissionBatch(agentId, {
     objectId,

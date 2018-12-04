@@ -49,17 +49,7 @@ export type UserResultList = Promise<{
   readonly total: number
 }>
 
-export enum EnumLegacyUserPermissionRole {
-  admin = 'admin',
-  articleAdmin = 'article-admin',
-  assetAdmin = 'asset-admin',
-  assetContactPerson = 'asset-contact-person',
-  documentAdmin = 'document-admin',
-  externalTicketCollaborator = 'external-ticket-collaborator',
-  pinboardAdmin = 'community-article-admin',
-}
-
-export enum EnumRopeUserPermissionRole {
+export enum EnumUserPermissionRole {
   appAdmin = 'app-admin',
   appOwner = 'app-owner',
   articleAdmin = 'article-admin',
@@ -227,7 +217,7 @@ export type MethodUserCreatePermission = (
     readonly objectId: string
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
-    readonly role: EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
+    readonly role: EnumUserPermissionRole
   },
 ) => UserPermissionResult
 
@@ -238,7 +228,7 @@ export async function userCreatePermission(
     readonly objectId: string
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
-    readonly role: EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
+    readonly role: EnumUserPermissionRole
   },
 ): UserPermissionResult {
   const { objectId: objectID, ...rest } = data
@@ -263,9 +253,7 @@ export type MethodUserCreatePermissionBatch = (
     readonly objectId: string
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
-    readonly roles: ReadonlyArray<
-      EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
-    >
+    readonly roles: ReadonlyArray<EnumUserPermissionRole>
   },
 ) => Promise<boolean>
 
@@ -276,9 +264,7 @@ export async function userCreatePermissionBatch(
     readonly objectId: string
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
-    readonly roles: ReadonlyArray<
-      EnumLegacyUserPermissionRole | EnumRopeUserPermissionRole
-    >
+    readonly roles: ReadonlyArray<EnumUserPermissionRole>
   },
 ): Promise<boolean> {
   const { objectId, objectType, roles } = data

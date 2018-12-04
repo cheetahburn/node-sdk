@@ -36,9 +36,8 @@ import {
   unitUpdateById,
 } from './methods/unit'
 import {
-  EnumLegacyUserPermissionRole,
-  EnumRopeUserPermissionRole,
   EnumUserPermissionObjectType,
+  EnumUserPermissionRole,
   getCurrentUser,
   getUsers,
   userCheckInToUtilisationPeriod,
@@ -134,12 +133,7 @@ const API_METHODS: ReadonlyArray<any> = [
   utilisationPeriodCheckOutUser,
 ]
 
-export {
-  EnumLegacyUserPermissionRole,
-  EnumRopeUserPermissionRole,
-  EnumUnitType,
-  EnumUserPermissionObjectType,
-}
+export { EnumUserPermissionRole, EnumUnitType, EnumUserPermissionObjectType }
 
 /*
   The API wrapper
