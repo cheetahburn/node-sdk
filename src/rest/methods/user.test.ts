@@ -175,7 +175,7 @@ describe('userGetPermissions()', () => {
 
     const result = await client.userGetPermissions(user.id)
 
-    expect(result).toHaveLength(1)
+    expect(result).toBeTruthy()
     expect(result[0].objectType).toEqual(permissionData.objectType)
   })
 })
@@ -208,7 +208,7 @@ describe('userDeletePermission()', () => {
     )
 
     // permission should exist
-    expect(await client.userGetPermissions(user.id)).toHaveLength(1)
+    expect(await client.userGetPermissions(user.id)).toBeTruthy()
 
     // delete the permission
     expect(await client.userDeletePermission(permission.id)).toBe(true)
