@@ -58,9 +58,7 @@ export enum EnumUserPermissionRole {
   bookingAgent = 'booking-agent',
   cockpitAdmin = 'cockpit-admin',
   cockpitManager = 'cockpit-manager',
-  // communityArticleAdmin = 'community-article-admin',
   dataConnectorAdmin = 'data-connector-admin',
-  // documentAdmin = 'document-admin',
   globalOrganizationAdmin = 'global-organization-admin',
   moderator = 'moderator',
   orgAgent = 'org-agent',
@@ -249,7 +247,7 @@ export async function userCreatePermission(
 
 export type MethodUserCreatePermissionBatch = (
   userId: string,
-  permission: PartialUserPermission & {
+  permissions: PartialUserPermission & {
     readonly objectId: string
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
@@ -260,14 +258,14 @@ export type MethodUserCreatePermissionBatch = (
 export async function userCreatePermissionBatch(
   client: InterfaceAllthingsRestClient,
   userId: string,
-  data: PartialUserPermission & {
+  permissions: PartialUserPermission & {
     readonly objectId: string
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
     readonly roles: ReadonlyArray<EnumUserPermissionRole>
   },
 ): Promise<boolean> {
-  const { objectId, objectType, roles } = data
+  const { objectId, objectType, roles } = permissions
 
   const batch = {
     batch: roles.map(role => ({
