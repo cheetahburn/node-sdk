@@ -115,10 +115,10 @@ export const remapEmbeddedUser = (embedded: {
 export type MethodUserCreate = (
   appId: string,
   username: string,
-  plainPassword: string,
   data: PartialUser & {
     readonly email: string
     readonly locale: EnumLocale
+    readonly plainPassword?: string
   },
 ) => UserResult
 
@@ -126,16 +126,15 @@ export async function userCreate(
   client: InterfaceAllthingsRestClient,
   appId: string,
   username: string,
-  plainPassword: string,
   data: PartialUser & {
     readonly email: string
     readonly locale: EnumLocale
+    readonly plainPassword?: string
   },
 ): UserResult {
   return client.post('/v1/users', {
     ...data,
     creationContext: appId,
-    plainPassword,
     username,
   })
 }
