@@ -98,7 +98,18 @@ describe('agentCreatePermissions()', () => {
     expect(agentPropertyPermissionResult).toBeTruthy()
 
     const agentPermissions = await client.userGetPermissions(agent.id)
-
     expect(agentPermissions).toBeTruthy()
+    expect(agentPermissions).toHaveLength(4)
+    // expect each role to equal the ones we added
+    agentPermissions.map(permission => {
+      expect(
+        [
+          EnumUserPermissionRole.bookingAgent,
+          EnumUserPermissionRole.articlesAgent,
+          EnumUserPermissionRole.appAdmin,
+          EnumUserPermissionRole.pinboardAgent,
+        ].includes(permission.role as EnumUserPermissionRole),
+      )
+    })
   })
 })

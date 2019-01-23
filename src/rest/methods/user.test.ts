@@ -152,10 +152,11 @@ describe('userGetPermissions()', () => {
 
     await client.userCreatePermission(user.id, permissionData)
 
-    const result = await client.userGetPermissions(user.id)
+    const [result] = await client.userGetPermissions(user.id)
 
     expect(result).toBeTruthy()
-    expect(result[0].objectType).toEqual(permissionData.objectType)
+    expect(result.objectType).toEqual(permissionData.objectType)
+    expect(result.role).toEqual(EnumUserPermissionRole.appAdmin)
   })
 })
 
@@ -266,6 +267,7 @@ describe('userGetUtilisationPeriods()', () => {
 
       expect(result.role).toEqual(permissionData.role)
       expect(result.objectType).toEqual(permissionData.objectType)
+      expect(result.role).toEqual(EnumUserPermissionRole.serviceCenterAgent)
     })
   })
 })

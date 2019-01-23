@@ -288,7 +288,7 @@ export async function userGetPermissions(
 ): Promise<ReadonlyArray<IUserPermission>> {
   const {
     _embedded: { items: permissions },
-  } = await client.get(`/v1/users/${userId}/permissions?limit=-1`)
+  } = await client.get(`/v1/users/${userId}/roles?limit=-1`)
 
   return permissions.map(({ objectID: objectId, ...result }: any) => ({
     ...result,
