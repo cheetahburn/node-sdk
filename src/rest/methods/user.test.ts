@@ -250,12 +250,7 @@ describe('userGetUtilisationPeriods()', () => {
         email: generateId() + '@foobar.test',
         externalId: generateId(),
       }
-      const user = await client.userCreate(
-        APP_ID,
-        generateId(),
-        generateId(),
-        initialData,
-      )
+      const user = await client.userCreate(APP_ID, generateId(), initialData)
 
       expect(user.email).toEqual(initialData.email)
       expect(user.externalId).toEqual(initialData.externalId)
@@ -264,7 +259,7 @@ describe('userGetUtilisationPeriods()', () => {
         objectId: APP_ID,
         objectType: EnumUserPermissionObjectType.app,
         restrictions: [],
-        role: EnumUserPermissionRole.serviceCentreAgent,
+        role: EnumUserPermissionRole.serviceCenterAgent,
       }
 
       const result = await client.userCreatePermission(user.id, permissionData)

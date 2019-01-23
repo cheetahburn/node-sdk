@@ -91,7 +91,7 @@ describe('agentCreatePermissions()', () => {
       EnumUserPermissionObjectType.property,
       [
         EnumUserPermissionRole.bookingAgent,
-        EnumUserPermissionRole.articleAdmin,
+        EnumUserPermissionRole.articlesAgent,
       ],
     )
 
