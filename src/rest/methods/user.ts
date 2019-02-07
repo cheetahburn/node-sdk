@@ -180,6 +180,34 @@ export async function userGetById(
 }
 
 /*
+  Get users by their email address
+*/
+
+export type MethodGetUsersByEmail = (
+  emails: ReadonlyArray<string>,
+  page?: number,
+  limit?: number,
+) => UserResultList
+
+export async function getUsersByEmail(
+  client: InterfaceAllthingsRestClient,
+  emails: ReadonlyArray<string>,
+  page = 1,
+  limit = -1,
+): UserResultList {
+  const {
+    _embedded: { items: users },
+    total,
+  } = await client.get(
+    `/v1/users?filter={"email":[${emails.map(
+      email => `"${email}"`,
+    )}]}&page=${page}&limit=${limit}`,
+  )
+
+  return { _embedded: { items: users.map(remapUserResult) }, total }
+}
+
+/*
   Update a user by their ID
 */
 

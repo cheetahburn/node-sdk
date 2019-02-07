@@ -42,6 +42,7 @@ import {
 import {
   MethodGetCurrentUser,
   MethodGetUsers,
+  MethodGetUsersByEmail,
   MethodUserCheckInToUtilisationPeriod,
   MethodUserCreate,
   MethodUserCreatePermission,
@@ -285,6 +286,11 @@ export interface InterfaceAllthingsRestClient {
    * Get a user by their ID
    */
   readonly userGetById: MethodUserGetById
+
+  /**
+   * Get a user by their ID
+   */
+  readonly getUsersByEmail: MethodGetUsersByEmail
 
   /**
    * Update a user by their ID

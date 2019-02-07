@@ -270,4 +270,26 @@ describe('userGetUtilisationPeriods()', () => {
       expect(result.role).toEqual(EnumUserPermissionRole.serviceCenterAgent)
     })
   })
+
+  describe('getUsersByEmail()', () => {
+    it('should be able find many users by their email address', async () => {
+      const user1 = await client.userCreate(APP_ID, generateId(), {
+        email: `${generateId()}@email.test`,
+        locale: EnumLocale.de_DE,
+      })
+
+      const user2 = await client.userCreate(APP_ID, generateId(), {
+        email: `${generateId()}@email.test`,
+        locale: EnumLocale.de_DE,
+      })
+
+      const users = await client.getUsersByEmail([user1.email, user2.email])
+
+      expect(users._embedded.items).toHaveLength(2)
+
+      users._embedded.items.map(user => {
+        expect([user1.email, user2.email]).toContain(user.email)
+      })
+    })
+  })
 })
