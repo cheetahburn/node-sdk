@@ -142,7 +142,7 @@ export async function userCreate(
 export type MethodGetUsers = (
   page?: number,
   limit?: number,
-  filter?: { readonly [key: string]: string | ReadonlyArray<string> },
+  filter?: IndexSignature,
 ) => UserResultList
 
 export async function getUsers(

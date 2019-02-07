@@ -54,7 +54,7 @@ describe('getUsers()', () => {
 
     expect(users._embedded.items).toHaveLength(2)
 
-    users._embedded.items.map(user => {
+    users._embedded.items.forEach(user => {
       expect([user1.email, user2.email]).toContain(user.email)
     })
   })
