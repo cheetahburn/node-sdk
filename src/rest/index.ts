@@ -40,7 +40,6 @@ import {
   EnumUserPermissionRole,
   getCurrentUser,
   getUsers,
-  getUsersByEmail,
   userCheckInToUtilisationPeriod,
   userCreate,
   userCreatePermission,
@@ -125,7 +124,6 @@ const API_METHODS: ReadonlyArray<any> = [
   userGetUtilisationPeriods,
   getCurrentUser,
   getUsers,
-  getUsersByEmail,
 
   // Utilisation Periods
   utilisationPeriodCreate,

@@ -36,6 +36,50 @@ describe('getUsers()', () => {
     const result2 = await client.getUsers(1, limit)
     expect(result2._embedded.items).toHaveLength(limit)
   })
+
+  it('should be able find many users by their email address', async () => {
+    const user1 = await client.userCreate(APP_ID, generateId(), {
+      email: `${generateId()}@email.test`,
+      locale: EnumLocale.de_DE,
+    })
+
+    const user2 = await client.userCreate(APP_ID, generateId(), {
+      email: `${generateId()}@email.test`,
+      locale: EnumLocale.de_DE,
+    })
+
+    const users = await client.getUsers(undefined, undefined, {
+      email: [user1.email, user2.email],
+    })
+
+    expect(users._embedded.items).toHaveLength(2)
+
+    users._embedded.items.map(user => {
+      expect([user1.email, user2.email]).toContain(user.email)
+    })
+  })
+
+  it('should find users with multiple search filters', async () => {
+    const user1 = await client.userCreate(APP_ID, generateId(), {
+      email: `${generateId()}@email.test`,
+      externalId: '123',
+      locale: EnumLocale.de_DE,
+    })
+
+    const user2 = await client.userCreate(APP_ID, generateId(), {
+      email: `${generateId()}@email.test`,
+      externalId: '321',
+      locale: EnumLocale.de_DE,
+    })
+
+    const users = await client.getUsers(undefined, undefined, {
+      email: [user1.email, user2.email],
+      externalId: ['123'],
+    })
+
+    expect(users._embedded.items).toHaveLength(1)
+    expect(users._embedded.items[0].id).toBe(user1.id)
+  })
 })
 
 describe('getCurrentUser()', () => {
@@ -268,28 +312,6 @@ describe('userGetUtilisationPeriods()', () => {
       expect(result.role).toEqual(permissionData.role)
       expect(result.objectType).toEqual(permissionData.objectType)
       expect(result.role).toEqual(EnumUserPermissionRole.serviceCenterAgent)
-    })
-  })
-
-  describe('getUsersByEmail()', () => {
-    it('should be able find many users by their email address', async () => {
-      const user1 = await client.userCreate(APP_ID, generateId(), {
-        email: `${generateId()}@email.test`,
-        locale: EnumLocale.de_DE,
-      })
-
-      const user2 = await client.userCreate(APP_ID, generateId(), {
-        email: `${generateId()}@email.test`,
-        locale: EnumLocale.de_DE,
-      })
-
-      const users = await client.getUsersByEmail([user1.email, user2.email])
-
-      expect(users._embedded.items).toHaveLength(2)
-
-      users._embedded.items.map(user => {
-        expect([user1.email, user2.email]).toContain(user.email)
-      })
     })
   })
 })
