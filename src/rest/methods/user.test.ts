@@ -59,6 +59,31 @@ describe('getUsers()', () => {
     })
   })
 
+  it('should be able find many users by their email address even when non canonicalized', async () => {
+    const email1 = 'NoNCanONicaLizedEmail@eMail.Test'
+    const email2 = 'canonicalized@email.test'
+
+    const user1 = await client.userCreate(APP_ID, generateId(), {
+      email: email1,
+      locale: EnumLocale.de_DE,
+    })
+
+    const user2 = await client.userCreate(APP_ID, generateId(), {
+      email: email2,
+      locale: EnumLocale.de_DE,
+    })
+
+    const users = await client.getUsers(undefined, undefined, {
+      email: [email1, email2],
+    })
+
+    expect(users._embedded.items).toHaveLength(2)
+
+    users._embedded.items.forEach(user => {
+      expect([user1.email, user2.email]).toContain(user.email)
+    })
+  })
+
   it('should find users with multiple search filters', async () => {
     const user1 = await client.userCreate(APP_ID, generateId(), {
       email: `${generateId()}@email.test`,
