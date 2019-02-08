@@ -139,17 +139,24 @@ export async function userCreate(
   Get a list of users
 */
 
-export type MethodGetUsers = (page?: number, limit?: number) => UserResultList
+export type MethodGetUsers = (
+  page?: number,
+  limit?: number,
+  filter?: IndexSignature,
+) => UserResultList
 
 export async function getUsers(
   client: InterfaceAllthingsRestClient,
   page = 1,
   limit = -1,
+  filter = {},
 ): UserResultList {
   const {
     _embedded: { items: users },
     total,
-  } = await client.get(`/v1/users?page=${page}&limit=${limit}`)
+  } = await client.get(
+    `/v1/users?page=${page}&limit=${limit}&filter=${JSON.stringify(filter)}`,
+  )
 
   return { _embedded: { items: users.map(remapUserResult) }, total }
 }
