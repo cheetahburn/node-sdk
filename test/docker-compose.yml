@@ -31,7 +31,6 @@ services:
         condition: service_started
   rope:
     image: allthings/rope
-    read_only: true
     environment:
       - LOGGING=true
       - PGHOST=postgres
