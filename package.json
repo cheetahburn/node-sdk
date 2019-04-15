@@ -79,7 +79,7 @@
     "lint-staged": "8.1.5",
     "nanoid": "2.0.1",
     "nyc": "13.3.0",
-    "prettier": "1.16.4",
+    "prettier": "1.17.0",
     "rimraf": "2.6.3",
     "rollup": "0.68.2",
     "rollup-plugin-commonjs": "9.3.4",
