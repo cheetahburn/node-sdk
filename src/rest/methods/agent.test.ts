@@ -76,10 +76,11 @@ describe('agentCreatePermissions()', () => {
       APP_ID,
       EnumUserPermissionObjectType.app,
       [EnumUserPermissionRole.appAdmin, EnumUserPermissionRole.pinboardAgent],
+      new Date('2019-01-01T00:00:00Z'),
+      new Date('2050-01-02T23:59:59Z'),
     )
 
     expect(agentAppPermissionResult).toBeTruthy()
-
     const property = await client.propertyCreate(APP_ID, {
       name: generateId(),
       timezone: EnumTimezone.EuropeBerlin,
@@ -110,6 +111,20 @@ describe('agentCreatePermissions()', () => {
           EnumUserPermissionRole.pinboardAgent,
         ].includes(permission.role as EnumUserPermissionRole),
       )
+    })
+    // expect appAdmin + pinboardAgent permissions to be timeboxed
+    agentPermissions.map(permission => {
+      if (
+        [
+          EnumUserPermissionRole.appAdmin,
+          EnumUserPermissionRole.pinboardAgent,
+        ].includes(permission.role as EnumUserPermissionRole)
+      ) {
+        expect(permission.startDate).toBeDefined()
+        expect(permission.endDate).toBeDefined()
+        expect(permission.startDate).toEqual('2019-01-01T00:00:00+0000')
+        expect(permission.endDate).toEqual('2050-01-02T23:59:59+0000')
+      }
     })
   })
 })

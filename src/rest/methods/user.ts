@@ -88,6 +88,8 @@ export interface IUserPermission {
   readonly role: string
   readonly objectId: string
   readonly objectType: EnumUserPermissionObjectType
+  readonly startDate?: Date
+  readonly endDate?: Date
 }
 
 export type PartialUserPermission = Partial<IUserPermission>
@@ -219,6 +221,8 @@ export type MethodUserCreatePermission = (
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
     readonly role: EnumUserPermissionRole
+    readonly startDate?: Date
+    readonly endDate?: Date
   },
 ) => UserPermissionResult
 
@@ -230,6 +234,8 @@ export async function userCreatePermission(
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
     readonly role: EnumUserPermissionRole
+    readonly startDate?: Date
+    readonly endDate?: Date
   },
 ): UserPermissionResult {
   const { objectId: objectID, ...rest } = data
@@ -255,6 +261,8 @@ export type MethodUserCreatePermissionBatch = (
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
     readonly roles: ReadonlyArray<EnumUserPermissionRole>
+    readonly startDate?: Date
+    readonly endDate?: Date
   },
 ) => Promise<boolean>
 
@@ -266,16 +274,20 @@ export async function userCreatePermissionBatch(
     readonly objectType: EnumUserPermissionObjectType
     readonly restrictions: ReadonlyArray<object>
     readonly roles: ReadonlyArray<EnumUserPermissionRole>
+    readonly startDate?: Date
+    readonly endDate?: Date
   },
 ): Promise<boolean> {
-  const { objectId, objectType, roles } = permissions
+  const { objectId, objectType, roles, startDate, endDate } = permissions
 
   const batch = {
     batch: roles.map(role => ({
+      endDate: endDate && endDate.toISOString(),
       objectID: objectId,
       objectType,
       restrictions: [],
       role,
+      startDate: startDate && startDate.toISOString(),
     })),
   }
 
