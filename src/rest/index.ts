@@ -28,6 +28,7 @@ import {
   registrationCodeCreate,
   registrationCodeDelete,
   registrationCodeGetById,
+  registrationCodeUpdateById,
 } from './methods/registrationCode'
 import {
   EnumUnitType,
@@ -102,6 +103,7 @@ const API_METHODS: ReadonlyArray<any> = [
 
   // Registration Code
   registrationCodeCreate,
+  registrationCodeUpdateById,
   registrationCodeDelete,
   registrationCodeGetById,
 
