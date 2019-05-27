@@ -11,6 +11,7 @@ export interface IGroup {
     readonly street: string | null
     readonly type: string | null
   }>
+  readonly isSynthetic: boolean | null
   readonly description: string | null
   readonly externalId: string | null
   readonly id: string

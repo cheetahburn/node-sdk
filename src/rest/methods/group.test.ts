@@ -12,6 +12,7 @@ const testPropertyData = {
 }
 
 const testData = {
+  isSynthetic: true,
   name: 'Foobar Group',
   propertyManagerId: APP_PROPERTY_MANAGER_ID,
 }
@@ -33,6 +34,7 @@ describe('groupCreate()', () => {
 
     expect(result.name).toEqual(data.name)
     expect(result.externalId).toEqual(data.externalId)
+    expect(result.isSynthetic).toEqual(data.isSynthetic)
   })
 })
 
@@ -46,6 +48,7 @@ describe('groupGetById()', () => {
 
     expect(result.name).toEqual(data.name)
     expect(result.externalId).toEqual(data.externalId)
+    expect(result.isSynthetic).toEqual(data.isSynthetic)
   })
 })
 
@@ -64,6 +67,7 @@ describe('groupUpdateById()', () => {
       address: { ...testAddressData },
       description: 'Bio Vegan Gluten Free Group',
       externalId: generateId(),
+      isSynthetic: false,
     }
 
     const result = await client.groupUpdateById(group.id, updateData)
@@ -71,5 +75,6 @@ describe('groupUpdateById()', () => {
     expect(result.address.country).toEqual(EnumCountryCode.DE)
     expect(result.description).toEqual(updateData.description)
     expect(result.externalId).toEqual(updateData.externalId)
+    expect(result.isSynthetic).toEqual(updateData.isSynthetic)
   })
 })
