@@ -1,3 +1,4 @@
+import { TokenRequester } from '../oauth/types'
 import { MethodHttpDelete } from './delete'
 import { MethodHttpGet } from './get'
 import {
@@ -119,17 +120,34 @@ export type EntityResultList<Entity, ExtensionInterface = {}> = Promise<
 // Describes the options with which to construct a new API wrapper instance
 export interface IAllthingsRestClientOptions {
   readonly apiUrl: string
+  readonly authorizationCode?: string
   readonly accessToken?: string
   readonly clientId?: string
   readonly clientSecret?: string
   readonly oauthUrl: string
   readonly password?: string
   readonly redirectUri?: string
+  readonly refreshToken?: string | undefined
   readonly requestBackOffInterval: number
   readonly requestMaxRetries: number
   readonly scope?: string
   readonly state?: string
   readonly username?: string
+  readonly implicit?: boolean
+  // tslint:disable-next-line no-mixed-interface
+  readonly authorizationRedirect?: (url: string) => any
+}
+
+export interface IClientExposedOAuth {
+  readonly authorizationCode: {
+    readonly getUri: (state?: string) => string
+    readonly requestToken: (
+      authorizationCode?: string,
+    ) => ReturnType<TokenRequester>
+  }
+  // tslint:disable-next-line no-mixed-interface
+  readonly refreshToken: (refreshToken?: string) => ReturnType<TokenRequester>
+  readonly generateState: () => string
 }
 
 // Describes the REST API wrapper's resulting interface
@@ -140,6 +158,8 @@ export interface IAllthingsRestClient {
   readonly get: MethodHttpGet
   readonly post: MethodHttpPost
   readonly patch: MethodHttpPatch
+
+  readonly oauth: IClientExposedOAuth
 
   // Agent
 

@@ -10,6 +10,7 @@ Allthings Node/Javascript SDK
 1.  [Authentication](#authentication)
 1.  [API](#api)
 1.  [OAuth Implicit Grant Example](#oauth-implicit-grant-example-example)
+1.  [OAuth Authorization Code Grant Example](#oauth-authorization-code-grant-example)
 1.  [Release management & versioning](#release-management--versioning)
 
 ## Installation & Usage
@@ -83,6 +84,46 @@ const client = allthings.restClient({
 client
   .getCurrentUser()
   .then(viewer => console.log(`Welcome back ${viewer.username}!`))
+```
+
+## OAuth Authorization Code Grant Example
+
+1. Initialize instance of `client`:
+```javascript
+const allthings = require('@allthings/sdk')
+
+const client = allthings.restClient({
+  clientId: '5d038ef2441f4de574005c54_example',
+  clientSecret: '40f63f981ff082dbc8d273983ac3852c2e51e90856123156',
+  redirectUri: 'https://example-app.com/callback'
+})
+```
+
+2. Construct a URI to send authorization request to using a `state` which should be unique per request and hard to guess. It can be generated with `client.oauth.generateState()` method:
+```javascript
+const state = client.oauth.generateState()
+const authorizationUri = client.oauth.authorizationCode.getUri(state)
+```
+
+3. Direct user's browser to the constructed URI.
+
+4. When user completes authentication process, he is redirected to the `redirectUri` having `code` and `state` query string arguments, e.g.:
+```
+https://example-app.com/callback?code=ebc110bee11b2829&state=k1bt3c1d0vnfu7qk
+```
+
+At this point `state` must be validated - if it doesn't match the one generated on step 2, such request is probably malicious and should be aborted.
+
+5. Use the code extracted from query parameters on the previous step to obtain an access token:
+
+```javascript
+await client.oauth.authorizationCode.requestToken(code)
+```
+
+6. Client is ready to make API requests:
+
+```javascript
+const user = await client.getCurrentUser()
 ```
 
 ## API

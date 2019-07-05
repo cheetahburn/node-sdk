@@ -1,5 +1,6 @@
 import { DEFAULT_API_WRAPPER_OPTIONS } from '../constants'
 import { partial } from '../utils/functional'
+import { pseudoRandomString } from '../utils/random'
 import httpDelete from './delete'
 import httpGet from './get'
 import { agentCreate, agentCreatePermissions } from './methods/agent'
@@ -73,7 +74,20 @@ import {
 import httpPatch from './patch'
 import httpPost from './post'
 import httpRequest from './request'
-import { IAllthingsRestClient, IAllthingsRestClientOptions } from './types'
+import {
+  IAllthingsRestClient,
+  IAllthingsRestClientOptions,
+  IClientExposedOAuth,
+} from './types'
+
+import {
+  getRedirectUrl as getAuthorizationUrl,
+  requestToken as requestTokenByCode,
+} from '../oauth/authorizationCodeGrant'
+import makeFetchTokenRequester from '../oauth/makeFetchTokenRequester'
+import makeTokenStore from '../oauth/makeTokenStore'
+import { requestToken as performRefreshTokenGrant } from '../oauth/refreshTokenGrant'
+import requestAndSaveToStore from '../oauth/requestAndSaveToStore'
 
 const API_METHODS: ReadonlyArray<any> = [
   // Agent
@@ -182,11 +196,24 @@ export default function restClient(
     throw new Error('OAuth2 URL is undefined.')
   }
 
-  if (!options.clientId && !options.accessToken) {
+  // in browser access token can be obtained from URL during implicit flow
+  if (
+    !options.clientId &&
+    !options.accessToken &&
+    typeof window === 'undefined'
+  ) {
     throw new Error('Missing required "clientId" or "accessToken" parameter .')
   }
 
-  const request = partial(httpRequest, options)
+  const tokenRequester = makeFetchTokenRequester(
+    `${options.oauthUrl}/oauth/token`,
+  )
+  const tokenStore = makeTokenStore({
+    accessToken: options.accessToken,
+    refreshToken: options.refreshToken,
+  })
+
+  const request = partial(httpRequest, tokenStore, tokenRequester, options)
 
   // partially apply the request method to the get/post
   // http request method functions
@@ -195,13 +222,47 @@ export default function restClient(
   const post = partial(httpPost, request)
   const patch = partial(httpPatch, request)
 
+  const oauth: IClientExposedOAuth = {
+    authorizationCode: {
+      getUri: (state = options.state || pseudoRandomString()) =>
+        partial(getAuthorizationUrl, {
+          ...options,
+          state,
+        })(),
+      requestToken: (authorizationCode?: string) =>
+        requestAndSaveToStore(
+          partial(requestTokenByCode, tokenRequester, {
+            ...options,
+            authorizationCode: authorizationCode || options.authorizationCode,
+          }),
+          tokenStore,
+        ),
+    },
+    generateState: pseudoRandomString,
+    refreshToken: (refreshToken?: string) =>
+      requestAndSaveToStore(
+        partial(performRefreshTokenGrant, tokenRequester, {
+          ...options,
+          refreshToken: refreshToken || tokenStore.get('refreshToken'),
+        }),
+        tokenStore,
+      ),
+  }
+
   const client: IAllthingsRestClient = API_METHODS.reduce(
     (methods, method) => ({
       ...methods,
       // tslint:disable-next-line readonly-array
       [method.name]: (...args: any[]) => method(client, ...args),
     }),
-    { delete: del, get, options, patch, post },
+    {
+      delete: del,
+      get,
+      oauth,
+      options,
+      patch,
+      post,
+    },
   )
 
   return client
