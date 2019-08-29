@@ -47,14 +47,7 @@ export type MethodHttpRequest = (
   payload?: IRequestOptions,
 ) => RequestResult
 
-const RETRYABLE_STATUS_CODES: ReadonlyArray<number> = [
-  401,
-  408,
-  429,
-  502,
-  503,
-  504,
-]
+const RETRYABLE_STATUS_CODES: ReadonlyArray<number> = [408, 429, 502, 503, 504]
 
 const TOKEN_REFRESH_STATUS_CODES: ReadonlyArray<number> = [401]
 
@@ -111,6 +104,13 @@ async function makeResultFromResponse(
   // E.g. retry 503s as it was likely a rate-limited request
   if (RETRYABLE_STATUS_CODES.includes(response.status)) {
     return response.clone()
+  }
+
+  if (response.status === 401) {
+    // provide a developer-friendly message in case credentials were not set by mistake
+    return new Error(
+      'API responded with 401 (Unauthorized). Make sure to provide credentials when creating restClient(). See https://github.com/allthings/node-sdk#installation--usage for details',
+    )
   }
 
   if (!response.ok) {

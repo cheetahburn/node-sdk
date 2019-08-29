@@ -31,6 +31,19 @@ describe('Rest API Client', () => {
     expect(me).toHaveProperty('id')
   })
 
+  it('should respond with helpful error message when API responds with 401', async () => {
+    const anonRestClient = restClient({
+      clientId: undefined,
+      clientSecret: undefined,
+      password: undefined,
+      username: undefined,
+    })
+
+    const promise = anonRestClient.getCurrentUser()
+    await expect(promise).rejects.toThrow(Error)
+    await expect(promise).rejects.toThrow(/^API responded with 401/)
+  })
+
   it('should throw error when apiUrl parameter is not provided', async () => {
     expect(() => restClient({ apiUrl: undefined } as any)).toThrow()
   })
