@@ -39,10 +39,6 @@ describe('Rest API Client', () => {
     expect(() => restClient({ oauthUrl: undefined } as any)).toThrow()
   })
 
-  it('should throw error when clientId parameter is not provided', async () => {
-    expect(() => restClient({ clientId: undefined } as any)).toThrow()
-  })
-
   it('should use default options when none provided, and process.env variables unset', async () => {
     jest.resetModules()
 
@@ -71,19 +67,6 @@ describe('Rest API Client', () => {
     jest.resetModules()
     // restore process.env.ALLTHINGS_* test values
     require('../../test/setup')
-  })
-
-  it('should throw error when unable to get access token', async () => {
-    const client = restClient({
-      accessToken: undefined,
-      clientSecret: undefined,
-      password: undefined,
-      username: undefined,
-    })
-
-    await expect(
-      client.appCreate('foobar', { name: 'foobar', siteUrl: 'foobar.test' }),
-    ).rejects.toThrow('Unable to get OAuth2 access token')
   })
 
   describe('exposed OAuth', () => {
