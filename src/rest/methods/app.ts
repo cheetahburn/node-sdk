@@ -1,4 +1,4 @@
-import { IAllthingsRestClient } from '../types'
+import { EnumCountryCode, EnumLocale, IAllthingsRestClient } from '../types'
 
 export interface IApp {
   readonly id: string
@@ -6,12 +6,23 @@ export interface IApp {
   readonly siteUrl: string
 }
 
+export interface IMicroApp {
+  readonly color: string
+  readonly label: { readonly [key in EnumLocale]: string }
+  readonly navigationHidden?: boolean
+  readonly order?: number
+  readonly url: string | null
+}
+
 export interface IAppConfig {
   readonly appId: string
   readonly appName: string
-  readonly appTitle: string
   readonly appSubTitle: string
+  readonly appTitle: string
+  readonly availableLocales: readonly EnumLocale[]
   readonly clientId: string
+  readonly country: EnumCountryCode
+  readonly microApps: readonly IMicroApp[]
 }
 
 export type PartialApp = Partial<IApp>
