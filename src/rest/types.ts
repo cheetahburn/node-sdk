@@ -5,7 +5,7 @@ import {
   MethodAgentCreate,
   MethodAgentCreatePermissions,
 } from './methods/agent'
-import { MethodAppCreate } from './methods/app'
+import { MethodAppConfigGet, MethodAppCreate } from './methods/app'
 import {
   MethodBucketAddFile,
   MethodBucketCreate,
@@ -181,6 +181,11 @@ export interface IAllthingsRestClient {
    * Create a new App.
    */
   readonly appCreate: MethodAppCreate
+
+  /**
+   * Gets config of an App by its id or hostname
+   */
+  readonly appConfigGet: MethodAppConfigGet
 
   // Bucket
 

@@ -4,7 +4,7 @@ import { pseudoRandomString } from '../utils/random'
 import httpDelete from './delete'
 import httpGet from './get'
 import { agentCreate, agentCreatePermissions } from './methods/agent'
-import { appCreate } from './methods/app'
+import { appConfigGet, appCreate } from './methods/app'
 import {
   bucketAddFile,
   bucketCreate,
@@ -96,6 +96,7 @@ const API_METHODS: ReadonlyArray<any> = [
   agentCreatePermissions,
 
   // App
+  appConfigGet,
   appCreate,
 
   // Bucket

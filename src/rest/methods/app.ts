@@ -6,6 +6,14 @@ export interface IApp {
   readonly siteUrl: string
 }
 
+export interface IAppConfig {
+  readonly appId: string
+  readonly appName: string
+  readonly appTitle: string
+  readonly appSubTitle: string
+  readonly clientId: string
+}
+
 export type PartialApp = Partial<IApp>
 
 export type CreateAppResult = Promise<IApp>
@@ -32,4 +40,23 @@ export async function appCreate(
     ...data,
     siteUrl: data.siteUrl.replace('_', ''),
   })
+}
+
+export type MethodAppConfigGet = (
+  appIdOrHostname: string,
+) => Promise<IAppConfig>
+
+export async function appConfigGet(
+  client: IAllthingsRestClient,
+  appIdOrHostname: string,
+): Promise<IAppConfig> {
+  const rawConfig = await client.get(
+    `/v1/apps/${appIdOrHostname}/configuration`,
+  )
+
+  return {
+    ...rawConfig,
+    appId: rawConfig.appID,
+    clientId: rawConfig.clientID,
+  }
 }
