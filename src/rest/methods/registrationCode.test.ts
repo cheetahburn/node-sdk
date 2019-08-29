@@ -42,7 +42,7 @@ beforeAll(async () => {
   ])).map(item => item.id)
 })
 
-describe('registrationCodeCreate()', async () => {
+describe('registrationCodeCreate()', () => {
   it('should be able to create a new registration code', async () => {
     const code = generateId()
     const testExternalId = generateId()
