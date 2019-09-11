@@ -165,3 +165,22 @@ export async function utilisationPeriodCheckOutUser(
     )) === ''
   )
 }
+
+/*
+  Add new registratation code by utilisation period
+*/
+export type MethodUtilisationPeriodAddRegistrationCode = (
+  utilisationPeriodId: string,
+  code: string,
+) => Promise<IUtilisationPeriodInvite>
+
+export async function utilisationPeriodAddRegistrationCode(
+  client: IAllthingsRestClient,
+  utilisationPeriodId: string,
+  code: string,
+): Promise<IUtilisationPeriodInvite> {
+  return client.post(
+    `/v1/utilisation-periods/${utilisationPeriodId}/registration-codes`,
+    { code },
+  )
+}
