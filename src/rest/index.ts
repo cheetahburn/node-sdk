@@ -212,10 +212,12 @@ export default function restClient(
   const tokenRequester = makeFetchTokenRequester(
     `${options.oauthUrl}/oauth/token`,
   )
-  const tokenStore = makeTokenStore({
-    accessToken: options.accessToken,
-    refreshToken: options.refreshToken,
-  })
+  const tokenStore =
+    options.tokenStore ||
+    makeTokenStore({
+      accessToken: options.accessToken,
+      refreshToken: options.refreshToken,
+    })
 
   const request = partial(httpRequest, tokenStore, tokenRequester, options)
 

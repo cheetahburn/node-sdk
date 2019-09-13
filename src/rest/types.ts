@@ -1,4 +1,4 @@
-import { TokenRequester } from '../oauth/types'
+import { ITokenStore, TokenRequester } from '../oauth/types'
 import { MethodHttpDelete } from './delete'
 import { MethodHttpGet } from './get'
 import {
@@ -133,6 +133,7 @@ export interface IAllthingsRestClientOptions {
   readonly requestMaxRetries: number
   readonly scope?: string
   readonly state?: string
+  readonly tokenStore?: ITokenStore
   readonly username?: string
   readonly implicit?: boolean
   // tslint:disable-next-line no-mixed-interface

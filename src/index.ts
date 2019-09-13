@@ -14,3 +14,4 @@ export {
   IAllthingsRestClient,
   IAllthingsRestClientOptions,
 } from './rest/types'
+export { default as makeTokenStore } from './oauth/makeTokenStore'
