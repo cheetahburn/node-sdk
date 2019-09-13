@@ -86,8 +86,8 @@ import {
   getRedirectUrl as getAuthorizationUrl,
   requestToken as requestTokenByCode,
 } from '../oauth/authorizationCodeGrant'
+import createTokenStore from '../oauth/createTokenStore'
 import makeFetchTokenRequester from '../oauth/makeFetchTokenRequester'
-import makeTokenStore from '../oauth/makeTokenStore'
 import { requestToken as performRefreshTokenGrant } from '../oauth/refreshTokenGrant'
 import requestAndSaveToStore from '../oauth/requestAndSaveToStore'
 
@@ -203,7 +203,7 @@ export default function restClient(
   // in browser access token can be obtained from URL during implicit flow
   if (
     !options.clientId &&
-    !options.accessToken &&
+    !(options.accessToken || options.tokenStore) &&
     typeof window === 'undefined'
   ) {
     throw new Error('Missing required "clientId" or "accessToken" parameter .')
@@ -212,10 +212,12 @@ export default function restClient(
   const tokenRequester = makeFetchTokenRequester(
     `${options.oauthUrl}/oauth/token`,
   )
-  const tokenStore = makeTokenStore({
-    accessToken: options.accessToken,
-    refreshToken: options.refreshToken,
-  })
+  const tokenStore =
+    options.tokenStore ||
+    createTokenStore({
+      accessToken: options.accessToken,
+      refreshToken: options.refreshToken,
+    })
 
   const request = partial(httpRequest, tokenStore, tokenRequester, options)
 

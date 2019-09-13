@@ -2,6 +2,7 @@
 import restClient from '.'
 import { DEFAULT_API_WRAPPER_OPTIONS } from '../constants'
 import * as authenticationCodeGrant from '../oauth/authorizationCodeGrant'
+import createTokenStore from '../oauth/createTokenStore'
 import * as makeFetchTokenRequesterModule from '../oauth/makeFetchTokenRequester'
 import * as passwordGrant from '../oauth/passwordGrant'
 
@@ -25,6 +26,22 @@ describe('Rest API Client', () => {
 
     const client = restClient({
       accessToken,
+    })
+
+    const me = await client.get('/v1/me')
+    expect(me).toHaveProperty('id')
+  })
+
+  it('should use tokenStore when provided in options object', async () => {
+    const { accessToken } = await passwordGrant.requestToken(
+      makeFetchTokenRequesterModule.default(
+        `${DEFAULT_API_WRAPPER_OPTIONS.oauthUrl}/oauth/token`,
+      ),
+      DEFAULT_API_WRAPPER_OPTIONS,
+    )
+
+    const client = restClient({
+      tokenStore: createTokenStore({ accessToken }),
     })
 
     const me = await client.get('/v1/me')
