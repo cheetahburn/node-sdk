@@ -2,8 +2,8 @@
 import restClient from '.'
 import { DEFAULT_API_WRAPPER_OPTIONS } from '../constants'
 import * as authenticationCodeGrant from '../oauth/authorizationCodeGrant'
+import createTokenStore from '../oauth/createTokenStore'
 import * as makeFetchTokenRequesterModule from '../oauth/makeFetchTokenRequester'
-import makeTokenStore from '../oauth/makeTokenStore'
 import * as passwordGrant from '../oauth/passwordGrant'
 
 const redirectUri = 'allthings://redirect'
@@ -41,7 +41,7 @@ describe('Rest API Client', () => {
     )
 
     const client = restClient({
-      tokenStore: makeTokenStore({ accessToken }),
+      tokenStore: createTokenStore({ accessToken }),
     })
 
     const me = await client.get('/v1/me')

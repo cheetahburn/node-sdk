@@ -86,8 +86,8 @@ import {
   getRedirectUrl as getAuthorizationUrl,
   requestToken as requestTokenByCode,
 } from '../oauth/authorizationCodeGrant'
+import createTokenStore from '../oauth/createTokenStore'
 import makeFetchTokenRequester from '../oauth/makeFetchTokenRequester'
-import makeTokenStore from '../oauth/makeTokenStore'
 import { requestToken as performRefreshTokenGrant } from '../oauth/refreshTokenGrant'
 import requestAndSaveToStore from '../oauth/requestAndSaveToStore'
 
@@ -214,7 +214,7 @@ export default function restClient(
   )
   const tokenStore =
     options.tokenStore ||
-    makeTokenStore({
+    createTokenStore({
       accessToken: options.accessToken,
       refreshToken: options.refreshToken,
     })

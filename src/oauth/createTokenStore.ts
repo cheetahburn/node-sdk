@@ -1,6 +1,6 @@
 import { ITokenStore } from './types'
 
-export default function makeTokenStore(
+export default function createTokenStore(
   initialToken?: IndexSignature,
 ): ITokenStore {
   const token = new Map<string, string>(Object.entries(initialToken || {}))
