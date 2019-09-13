@@ -203,7 +203,7 @@ export default function restClient(
   // in browser access token can be obtained from URL during implicit flow
   if (
     !options.clientId &&
-    !options.accessToken &&
+    !(options.accessToken || options.tokenStore) &&
     typeof window === 'undefined'
   ) {
     throw new Error('Missing required "clientId" or "accessToken" parameter .')
