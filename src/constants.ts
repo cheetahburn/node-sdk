@@ -8,7 +8,7 @@ const OAUTH_URL = 'https://accounts.allthings.me'
 export const QUEUE_CONCURRENCY = undefined
 export const QUEUE_DELAY = 0
 export const QUEUE_RESERVOIR = 30
-export const QUEUE_RESERVOIR_REFILL_INTERVAL = 500
+export const QUEUE_RESERVOIR_REFILL_INTERVAL = 50
 
 // Request error handling options
 export const REQUEST_BACK_OFF_INTERVAL = 200
