@@ -1,7 +1,9 @@
 // tslint:disable:no-expression-statement
+import generateId from 'nanoid'
 import restClient from '..'
 import { APP_ID } from '../../../test/constants'
-import { EnumResource } from '../types'
+import { EnumCountryCode, EnumResource } from '../types'
+import { EnumServiceProviderType } from './serviceProvider'
 
 const client = restClient()
 
@@ -27,6 +29,38 @@ describe('lookupIds()', () => {
       bar: null,
       foo: null,
       foobar: null,
+    })
+  })
+  it('should be able to lookup up service-providers with parent', async () => {
+    const serviceProviderParent = await client.serviceProviderCreate({
+      externalId: generateId(),
+      name: 'Parent',
+    })
+
+    const serviceProvider = await client.serviceProviderCreate({
+      address: {
+        city: 'Freiburg',
+        country: EnumCountryCode.DE,
+        houseNumber: '1337a',
+        postalCode: '79112',
+        street: 'street',
+      },
+      email: 'foo@bar.de',
+      externalId: generateId(),
+      name: 'Foobar Property-manager',
+      parent: serviceProviderParent.id,
+      phoneNumber: '+493434343343',
+      type: EnumServiceProviderType.craftsPeople,
+    })
+
+    const result = await client.lookupIds(APP_ID, {
+      externalIds: [serviceProvider.externalId],
+      parentId: serviceProviderParent.id,
+      resource: EnumResource.serviceProvider,
+    })
+
+    expect(result).toEqual({
+      [serviceProvider.externalId]: serviceProvider.id,
     })
   })
 })

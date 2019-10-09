@@ -38,6 +38,11 @@ import {
   registrationCodeUpdateById,
 } from './methods/registrationCode'
 import {
+  serviceProviderCreate,
+  serviceProviderGetById,
+  serviceProviderUpdateById,
+} from './methods/serviceProvider'
+import {
   EnumUnitType,
   getUnits,
   unitCreate,
@@ -129,6 +134,11 @@ const API_METHODS: ReadonlyArray<any> = [
   propertyGetById,
   propertyUpdateById,
   getProperties,
+
+  // Service Provider
+  serviceProviderCreate,
+  serviceProviderGetById,
+  serviceProviderUpdateById,
 
   // Registration Code
   registrationCodeCreate,

@@ -39,6 +39,11 @@ import {
   MethodRegistrationCodeUpdateById,
 } from './methods/registrationCode'
 import {
+  MethodServiceProviderCreate,
+  MethodServiceProviderGetById,
+  MethodServiceProviderUpdateById,
+} from './methods/serviceProvider'
+import {
   MethodGetUnits,
   MethodUnitCreate,
   MethodUnitGetById,
@@ -74,12 +79,13 @@ import { MethodHttpPost } from './post'
 
 // Describes the possible resources which exist in the API
 export enum EnumResource {
-  property = 'property',
   group = 'group',
+  property = 'property',
+  serviceProvider = 'propertyManager',
   registrationCode = 'registrationCode',
   unit = 'unit',
-  utilisationPeriod = 'utilisationPeriod',
   user = 'user',
+  utilisationPeriod = 'utilisationPeriod',
 }
 
 export enum EnumCountryCode {
@@ -274,6 +280,23 @@ export interface IAllthingsRestClient {
    * Get a list of properties
    */
   readonly getProperties: MethodGetProperties
+
+  // Service providers
+
+  /**
+   * Create a new service provider
+   */
+  readonly serviceProviderCreate: MethodServiceProviderCreate
+
+  /**
+   * Get a service provider by its ID
+   */
+  readonly serviceProviderGetById: MethodServiceProviderGetById
+
+  /**
+   * Update a service provider by its ID
+   */
+  readonly serviceProviderUpdateById: MethodServiceProviderUpdateById
 
   // Registration Code
 
