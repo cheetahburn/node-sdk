@@ -1,5 +1,8 @@
 import { IAllthingsRestClient } from '../types'
-import { remapRegistationCodeResult } from './registrationCode'
+import {
+  IRegistrationCodeTenant,
+  remapRegistationCodeResult,
+} from './registrationCode'
 import { IUser, remapEmbeddedUser } from './user'
 
 export interface IUtilisationPeriod {
@@ -35,6 +38,7 @@ export interface IUtilisationPeriodInvite {
   readonly externalId: string
   readonly organizations: ReadonlyArray<string> // array of mongoId
   readonly teams: ReadonlyArray<string> // array of mongoId
+  readonly tenant: IRegistrationCodeTenant
   readonly resendAttempts: ReadonlyArray<string> // array of dates
   readonly usedAt: string | null
 }
@@ -172,15 +176,17 @@ export async function utilisationPeriodCheckOutUser(
 export type MethodUtilisationPeriodAddRegistrationCode = (
   utilisationPeriodId: string,
   code: string,
+  tenant?: IRegistrationCodeTenant,
 ) => Promise<IUtilisationPeriodInvite>
 
 export async function utilisationPeriodAddRegistrationCode(
   client: IAllthingsRestClient,
   utilisationPeriodId: string,
   code: string,
+  tenant?: IRegistrationCodeTenant,
 ): Promise<IUtilisationPeriodInvite> {
   return client.post(
     `/v1/utilisation-periods/${utilisationPeriodId}/registration-codes`,
-    { code },
+    { code, tenant },
   )
 }
