@@ -207,6 +207,7 @@ describe('utilisationPeriodAddRegistrationCode()', () => {
     const tenant = {
       email: 'tenant@allthings.me',
       name: 'Teo Tenant',
+      phone: '0123456789',
     }
 
     const result = await client.utilisationPeriodAddRegistrationCode(
