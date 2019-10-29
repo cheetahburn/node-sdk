@@ -10,6 +10,7 @@ export interface IUserRelation {
     readonly properties: ReadonlyArray<string>
     readonly groups: ReadonlyArray<string>
   }>
+  readonly readOnly: boolean
 }
 
 export type UserRelationResult = Promise<IUserRelation>
@@ -22,6 +23,7 @@ export type MethodUserRelationCreate = (
   userId: string,
   data: {
     readonly ids: ReadonlyArray<string>
+    readonly readOnly?: boolean
     readonly role?: string
     readonly type: EnumUserRelationType
     readonly level: EnumResource
@@ -44,6 +46,7 @@ export async function userRelationCreate(
   userId: string,
   data: {
     readonly ids: ReadonlyArray<string>
+    readonly readOnly: boolean
     readonly role?: string
     readonly type: EnumUserRelationType
     readonly level: EnumResource
@@ -52,6 +55,7 @@ export async function userRelationCreate(
   return client.post(`/v1/users/${userId}/user-relations/${data.type}`, {
     ids: data.ids,
     level: data.level,
+    readOnly: data.readOnly,
     role: data.role,
   })
 }
