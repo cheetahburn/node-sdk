@@ -22,6 +22,7 @@ export type MethodAgentCreate = (
     readonly email: string
     readonly locale: EnumLocale
   },
+  externalAgentCompany?: string,
 ) => UserResult
 
 export async function agentCreate(
@@ -33,6 +34,7 @@ export async function agentCreate(
     readonly email: string
     readonly locale: EnumLocale
   },
+  externalAgentCompany?: string,
 ): UserResult {
   const user = await client.userCreate(appId, username, {
     ...data,
@@ -42,6 +44,7 @@ export async function agentCreate(
     `/v1/property-managers/${propertyManagerId}/users`,
     {
       userID: user.id,
+      ...(externalAgentCompany && { externalAgentCompany }),
     },
   )
 
