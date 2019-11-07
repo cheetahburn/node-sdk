@@ -23,6 +23,7 @@ export interface IServiceProvider {
   readonly phoneNumber: string | null
   readonly type: EnumServiceProviderType
   readonly website: string | null
+  readonly readOnly: boolean
 }
 
 export type PartialServiceProvider = Partial<IServiceProvider>
