@@ -5,7 +5,7 @@ import {
   MethodAgentCreate,
   MethodAgentCreatePermissions,
 } from './methods/agent'
-import { MethodAppCreate } from './methods/app'
+import { MethodAppCreate, MethodAppGetById } from './methods/app'
 import {
   MethodBucketAddFile,
   MethodBucketCreate,
@@ -13,6 +13,10 @@ import {
   MethodBucketRemoveFile,
   MethodBucketRemoveFilesInPath,
 } from './methods/bucket'
+import {
+  MethodConversationCreateMessage,
+  MethodConversationGetById,
+} from './methods/conversation'
 import { MethodFileCreate, MethodFileDelete } from './methods/file'
 import {
   MethodGetGroups,
@@ -43,6 +47,7 @@ import {
   MethodServiceProviderGetById,
   MethodServiceProviderUpdateById,
 } from './methods/serviceProvider'
+import { MethodTicketCreate, MethodTicketGetById } from './methods/ticket'
 import {
   MethodGetUnits,
   MethodUnitCreate,
@@ -57,6 +62,7 @@ import {
   MethodUserCreatePermission,
   MethodUserCreatePermissionBatch,
   MethodUserDeletePermission,
+  MethodUserGetByEmail,
   MethodUserGetById,
   MethodUserGetPermissions,
   MethodUserGetUtilisationPeriods,
@@ -195,6 +201,11 @@ export interface IAllthingsRestClient {
    */
   readonly appCreate: MethodAppCreate
 
+  /**
+   * Get an app by it's id
+   */
+  readonly appGetById: MethodAppGetById
+
   // Bucket
 
   /**
@@ -217,6 +228,30 @@ export interface IAllthingsRestClient {
    * Gets a Bucket.
    */
   readonly bucketGet: MethodBucketGet
+
+  // Conversation
+
+  /**
+   * Gets a conversation by id
+   */
+  readonly conversationGetById: MethodConversationGetById
+
+  /**
+   * Creates a message on a conversation
+   */
+  readonly conversationCreateMessage: MethodConversationCreateMessage
+
+  // File
+
+  /**
+   * Creates a file
+   */
+  readonly fileCreate: MethodFileCreate
+
+  /**
+   * Deletes a file by it's ID
+   */
+  readonly fileDelete: MethodFileDelete
 
   // ID Lookup
 
@@ -325,17 +360,17 @@ export interface IAllthingsRestClient {
    */
   readonly registrationCodeDelete: MethodRegistrationCodeDelete
 
-  // File
+  // ticket
 
   /**
-   * Creates a file
+   * Create a ticket
    */
-  readonly fileCreate: MethodFileCreate
+  readonly ticketCreate: MethodTicketCreate
 
   /**
-   * Deletes a file by it's ID
+   * Get a ticket by its ID
    */
-  readonly fileDelete: MethodFileDelete
+  readonly ticketGetById: MethodTicketGetById
 
   // Unit
 
@@ -416,6 +451,11 @@ export interface IAllthingsRestClient {
    * utilisation-periodId
    */
   readonly userCheckInToUtilisationPeriod: MethodUserCheckInToUtilisationPeriod
+
+  /**
+   * Finds users by an email address
+   */
+  readonly userGetByEmail: MethodUserGetByEmail
 
   // User Relation
 
