@@ -157,7 +157,7 @@ export async function unitUpdateById(
 export type MethodGetUnits = (
   page?: number,
   limit?: number,
-  filter?: IndexSignature,
+  filter?: IDictionary,
 ) => UnitResultList
 
 export async function getUnits(
@@ -169,9 +169,11 @@ export async function getUnits(
   const {
     _embedded: { items: units },
     total,
-  } = await client.get(
-    `/v1/units?page=${page}&limit=${limit}&filter=${JSON.stringify(filter)}`,
-  )
+  } = await client.get('/v1/units', {
+    filter: JSON.stringify(filter),
+    limit,
+    page,
+  })
 
   return { _embedded: { items: units }, total }
 }

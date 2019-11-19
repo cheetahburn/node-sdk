@@ -72,7 +72,7 @@ export async function propertyUpdateById(
 export type MethodGetProperties = (
   page?: number,
   limit?: number,
-  filter?: IndexSignature,
+  filter?: IDictionary,
 ) => PropertyResultList
 
 export async function getProperties(
@@ -84,11 +84,11 @@ export async function getProperties(
   const {
     _embedded: { items: properties },
     total,
-  } = await client.get(
-    `/v1/properties?page=${page}&limit=${limit}&filter=${JSON.stringify(
-      filter,
-    )}`,
-  )
+  } = await client.get('/v1/properties', {
+    filter: JSON.stringify(filter),
+    limit,
+    page,
+  })
 
   return { _embedded: { items: properties }, total }
 }

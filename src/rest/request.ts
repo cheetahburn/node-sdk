@@ -205,11 +205,12 @@ export function makeApiRequest(
         refillReservoir() &&
         (await queue.schedule(async () => {
           const method = httpMethod.toUpperCase()
-          const url = `${options.apiUrl}/api${apiMethod}${
+          const payloadQuery =
             payload && payload.query
-              ? '?' + querystring.stringify(payload.query)
+              ? (apiMethod.includes('?') ? '&' : '?') +
+                querystring.stringify(payload.query)
               : ''
-          }`
+          const url = `${options.apiUrl}/api${apiMethod}${payloadQuery}`
           const body = payload && payload.body
           const hasForm = isFormData(body)
           const form = isFormData(body) ? body.formData : {}

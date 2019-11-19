@@ -107,7 +107,7 @@ export async function groupUpdateById(
 export type MethodGetGroups = (
   page?: number,
   limit?: number,
-  filter?: IndexSignature,
+  filter?: IDictionary,
 ) => GroupResultList
 
 export async function getGroups(
@@ -119,9 +119,11 @@ export async function getGroups(
   const {
     _embedded: { items: groups },
     total,
-  } = await client.get(
-    `/v1/groups?page=${page}&limit=${limit}&filter=${JSON.stringify(filter)}`,
-  )
+  } = await client.get('/v1/groups', {
+    filter: JSON.stringify(filter),
+    limit,
+    page,
+  })
 
   return { _embedded: { items: groups }, total }
 }

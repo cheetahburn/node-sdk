@@ -152,7 +152,7 @@ export async function userCreate(
 export type MethodGetUsers = (
   page?: number,
   limit?: number,
-  filter?: IndexSignature,
+  filter?: IDictionary,
 ) => UserResultList
 
 export async function getUsers(
@@ -164,9 +164,11 @@ export async function getUsers(
   const {
     _embedded: { items: users },
     total,
-  } = await client.get(
-    `/v1/users?page=${page}&limit=${limit}&filter=${JSON.stringify(filter)}`,
-  )
+  } = await client.get('/v1/users', {
+    filter: JSON.stringify(filter),
+    limit,
+    page,
+  })
 
   return { _embedded: { items: users.map(remapUserResult) }, total }
 }
@@ -244,10 +246,13 @@ export async function userCreatePermission(
   },
 ): UserPermissionResult {
   const { objectId: objectID, ...rest } = data
-  const { objectID: resultObjectId, ...result } = await client.post(
-    `/v1/users/${userId}/permissions`,
-    { ...rest, objectID },
-  )
+  const {
+    objectID: resultObjectId,
+    ...result
+  } = await client.post(`/v1/users/${userId}/permissions`, {
+    ...rest,
+    objectID,
+  })
 
   return {
     ...result,
