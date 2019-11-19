@@ -153,4 +153,40 @@ describe('Request', () => {
       true,
     )
   })
+
+  it('should respect existing ? in url', async () => {
+    mockFetch.mockResolvedValueOnce({
+      clone: () => ({ text: () => '' }),
+      headers: new Map([['content-type', 'text/json']]),
+      ok: true,
+      status: 200,
+    })
+
+    await makeApiRequest(
+      mockTokenStore,
+      fakeOauthTokenFetcher,
+      DEFAULT_API_WRAPPER_OPTIONS,
+      'get',
+      '/foo?bar=1',
+      {
+        query: { limit: '1' },
+      },
+    )({}, 0)
+
+    expect(mockFetch).toHaveBeenLastCalledWith(
+      'https://api.dev.allthings.me/api/foo?bar=1&limit=1',
+      {
+        cache: 'no-cache',
+        credentials: 'omit',
+        headers: {
+          accept: 'application/json',
+          authorization: `Bearer ${mockTokenResult.accessToken}`,
+          'content-type': 'application/json',
+          'user-agent': 'Allthings Node SDK REST Client/0.0.0-development',
+        },
+        method: 'GET',
+        mode: 'cors',
+      },
+    )
+  })
 })
