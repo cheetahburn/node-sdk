@@ -4,13 +4,13 @@ export type DeleteResult = Promise<any>
 
 export type MethodHttpDelete = (
   method: string,
-  body?: { readonly [key: string]: any },
+  body?: IDictionary,
 ) => DeleteResult
 
 export default async function del(
   request: MethodHttpRequest,
   method: string,
-  body: { readonly [key: string]: any },
+  body: IDictionary,
 ): DeleteResult {
   return request('delete', method, { body })
 }

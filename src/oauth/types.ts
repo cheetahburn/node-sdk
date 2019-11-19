@@ -10,4 +10,4 @@ export interface ITokenStore {
   readonly reset: () => void
 }
 
-export type TokenRequester = (params: IndexSignature) => Promise<IOAuthToken>
+export type TokenRequester = (params: IDictionary) => Promise<IOAuthToken>

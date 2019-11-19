@@ -5,7 +5,7 @@ import { TokenRequester } from './types'
 export const RESPONSE_TYPE = 'code'
 export const GRANT_TYPE = 'authorization_code'
 
-const castToAuthorizationRequestParams = (params: IndexSignature) => {
+const castToAuthorizationRequestParams = (params: IDictionary) => {
   const { redirectUri, clientId, scope, state } = params
 
   if (!clientId) {
@@ -29,9 +29,7 @@ const castToAuthorizationRequestParams = (params: IndexSignature) => {
   }
 }
 
-export const isEligibleForClientRedirect = (
-  params: IndexSignature,
-): boolean => {
+export const isEligibleForClientRedirect = (params: IDictionary): boolean => {
   try {
     return !!castToAuthorizationRequestParams(params)
   } catch {
@@ -39,12 +37,12 @@ export const isEligibleForClientRedirect = (
   }
 }
 
-export const getRedirectUrl = (params: IndexSignature) =>
+export const getRedirectUrl = (params: IDictionary) =>
   `${params.oauthUrl}/oauth/authorize?${querystring.stringify(
     castToAuthorizationRequestParams(params),
   )}`
 
-const castToTokenRequestParams = (params: IndexSignature) => {
+const castToTokenRequestParams = (params: IDictionary) => {
   const { authorizationCode, redirectUri, clientId, clientSecret } = params
 
   if (!clientId) {
@@ -74,7 +72,7 @@ const castToTokenRequestParams = (params: IndexSignature) => {
   }
 }
 
-export const isEligible = (params: IndexSignature): boolean => {
+export const isEligible = (params: IDictionary): boolean => {
   try {
     return !!castToTokenRequestParams(params)
   } catch {
@@ -84,5 +82,5 @@ export const isEligible = (params: IndexSignature): boolean => {
 
 export const requestToken = (
   tokenRequester: TokenRequester,
-  params: IndexSignature,
+  params: IDictionary,
 ) => tokenRequester(castToTokenRequestParams(params))

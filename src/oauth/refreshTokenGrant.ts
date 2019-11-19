@@ -2,7 +2,7 @@ import { TokenRequester } from './types'
 
 export const GRANT_TYPE = 'refresh_token'
 
-const castToTokenRequestParams = (params: IndexSignature) => {
+const castToTokenRequestParams = (params: IDictionary) => {
   const { clientId, clientSecret, refreshToken, scope } = params
 
   if (!clientId) {
@@ -26,7 +26,7 @@ const castToTokenRequestParams = (params: IndexSignature) => {
   }
 }
 
-export const isEligible = (params: IndexSignature): boolean => {
+export const isEligible = (params: IDictionary): boolean => {
   try {
     return !!castToTokenRequestParams(params)
   } catch {
@@ -36,5 +36,5 @@ export const isEligible = (params: IndexSignature): boolean => {
 
 export const requestToken = (
   tokenRequester: TokenRequester,
-  params: IndexSignature,
+  params: IDictionary,
 ) => tokenRequester(castToTokenRequestParams(params))
