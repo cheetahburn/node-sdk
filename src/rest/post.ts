@@ -2,10 +2,7 @@ import { MethodHttpRequest } from './request'
 
 export type PostResult = Promise<any>
 
-export type MethodHttpPost = (
-  method: string,
-  body?: IDictionary | { readonly ['formData']: IDictionary },
-) => PostResult
+export type MethodHttpPost = (method: string, body?: IDictionary) => PostResult
 
 export default async function post(
   request: MethodHttpRequest,
