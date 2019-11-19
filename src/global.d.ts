@@ -1,12 +1,12 @@
-interface IndexSignature {
-  readonly [key: string]: any
+interface IDictionary<T = any> {
+  readonly [key: string]: T
 }
 
 type List<T> = ReadonlyArray<T>
 
 declare namespace NodeJS {
   interface Global {
-    window: any
+    readonly window: any
   }
 }
 
