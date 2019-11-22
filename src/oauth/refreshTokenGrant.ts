@@ -2,7 +2,7 @@ import { TokenRequester } from './types'
 
 export const GRANT_TYPE = 'refresh_token'
 
-const castToTokenRequestParams = (params: IDictionary) => {
+const castToTokenRequestParams = (params: Record<string, any>) => {
   const { clientId, clientSecret, refreshToken, scope } = params
 
   if (!clientId) {
@@ -26,7 +26,7 @@ const castToTokenRequestParams = (params: IDictionary) => {
   }
 }
 
-export const isEligible = (params: IDictionary): boolean => {
+export const isEligible = (params: Record<string, any>): boolean => {
   try {
     return !!castToTokenRequestParams(params)
   } catch {
@@ -36,5 +36,5 @@ export const isEligible = (params: IDictionary): boolean => {
 
 export const requestToken = (
   tokenRequester: TokenRequester,
-  params: IDictionary,
+  params: Record<string, any>,
 ) => tokenRequester(castToTokenRequestParams(params))

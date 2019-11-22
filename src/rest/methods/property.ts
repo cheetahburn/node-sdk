@@ -72,7 +72,7 @@ export async function propertyUpdateById(
 export type MethodGetProperties = (
   page?: number,
   limit?: number,
-  filter?: IDictionary,
+  filter?: Record<string, any>,
 ) => PropertyResultList
 
 export async function getProperties(

@@ -1,7 +1,7 @@
 import { ITokenStore } from './types'
 
 export default function createTokenStore(
-  initialToken?: IDictionary,
+  initialToken?: Record<string, any>,
 ): ITokenStore {
   const token = new Map<string, string>(Object.entries(initialToken || {}))
 

@@ -157,7 +157,7 @@ export async function unitUpdateById(
 export type MethodGetUnits = (
   page?: number,
   limit?: number,
-  filter?: IDictionary,
+  filter?: Record<string, any>,
 ) => UnitResultList
 
 export async function getUnits(

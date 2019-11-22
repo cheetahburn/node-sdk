@@ -107,7 +107,7 @@ export async function groupUpdateById(
 export type MethodGetGroups = (
   page?: number,
   limit?: number,
-  filter?: IDictionary,
+  filter?: Record<string, any>,
 ) => GroupResultList
 
 export async function getGroups(

@@ -10,7 +10,7 @@ import { ITokenStore, TokenRequester } from './types'
 export default async function maybeUpdateToken(
   oauthTokenStore: ITokenStore,
   tokenFetcher: TokenRequester,
-  options: IDictionary,
+  options: Record<string, any>,
   mustRefresh = false,
 ): Promise<void> {
   if (!mustRefresh && oauthTokenStore.get('accessToken')) {

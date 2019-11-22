@@ -152,7 +152,7 @@ export async function userCreate(
 export type MethodGetUsers = (
   page?: number,
   limit?: number,
-  filter?: IDictionary,
+  filter?: Record<string, any>,
 ) => UserResultList
 
 export async function getUsers(
@@ -246,13 +246,13 @@ export async function userCreatePermission(
   },
 ): UserPermissionResult {
   const { objectId: objectID, ...rest } = data
-  const {
-    objectID: resultObjectId,
-    ...result
-  } = await client.post(`/v1/users/${userId}/permissions`, {
-    ...rest,
-    objectID,
-  })
+  const { objectID: resultObjectId, ...result } = await client.post(
+    `/v1/users/${userId}/permissions`,
+    {
+      ...rest,
+      objectID,
+    },
+  )
 
   return {
     ...result,
