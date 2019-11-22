@@ -1,7 +1,3 @@
-interface IDictionary<T = any> {
-  readonly [key: string]: T
-}
-
 type List<T> = ReadonlyArray<T>
 
 declare namespace NodeJS {
