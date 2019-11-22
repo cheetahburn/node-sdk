@@ -36,6 +36,7 @@ export interface IUser {
   readonly externalId: string | null
   readonly gender: EnumGender
   readonly id: string
+  readonly inviteEmailSent: boolean
   readonly lastLogin: string | null
   readonly locale: EnumLocale
   readonly nativeAppInstallIds: ReadonlyArray<string> | null

@@ -23,7 +23,7 @@ const testData = {
 }
 
 describe('agentCreate()', () => {
-  it('should be able to create a new agent', async () => {
+  it('should be able to create a new agent and send an invitation per default', async () => {
     const data = {
       ...testData,
       email: generateId() + '@foobar.test',
@@ -39,6 +39,7 @@ describe('agentCreate()', () => {
 
     const result = await client.userGetById(agent.id)
 
+    expect(result.inviteEmailSent).toBeTruthy()
     expect(result.email).toEqual(data.email)
     expect(result.externalId).toEqual(data.externalId)
     expect(result.roles).toEqual([])
@@ -59,6 +60,24 @@ describe('agentCreate()', () => {
     expect(ourManagerAgent.externalId).toEqual(agent.externalId)
     expect(ourManagerAgent.roles).toEqual(agent.roles)
     expect(ourManagerAgent.type).toEqual(agent.type)
+  })
+
+  it('should be able to suppress sending an invitation on a new agent', async () => {
+    const data = {
+      ...testData,
+      email: generateId() + '@foobar.test',
+      externalId: generateId(),
+    }
+
+    const agent = await client.agentCreate(
+      APP_ID,
+      APP_PROPERTY_MANAGER_ID,
+      generateId(),
+      data,
+      false,
+    )
+    const result = await client.userGetById(agent.id)
+    expect(result.inviteEmailSent).toBeFalsy()
   })
 
   it('should be able to create a new agent with a externalAgentCompany associated', async () => {
@@ -91,6 +110,7 @@ describe('agentCreate()', () => {
       APP_PROPERTY_MANAGER_ID,
       generateId(),
       data,
+      true,
       externalAgentCompany.id,
     )
 
@@ -132,6 +152,7 @@ describe('agentCreatePermissions()', () => {
       APP_PROPERTY_MANAGER_ID,
       generateId(),
       data,
+      false,
     )
 
     const agentAppPermissionResult = await client.agentCreatePermissions(
