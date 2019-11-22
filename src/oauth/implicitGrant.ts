@@ -2,7 +2,7 @@ import querystring from 'query-string'
 
 export const RESPONSE_TYPE = 'token'
 
-const castToAuthorizationRequestParams = (params: IndexSignature) => {
+const castToAuthorizationRequestParams = (params: Record<string, any>) => {
   const { clientId, scope, state, redirectUri } = params
 
   if (!clientId) {
@@ -21,7 +21,7 @@ const castToAuthorizationRequestParams = (params: IndexSignature) => {
 }
 
 export const isEligibleForClientRedirect = (
-  params: IndexSignature,
+  params: Record<string, any>,
 ): boolean => {
   try {
     return !!castToAuthorizationRequestParams(params)
@@ -30,7 +30,7 @@ export const isEligibleForClientRedirect = (
   }
 }
 
-export const getRedirectUrl = (params: IndexSignature) =>
+export const getRedirectUrl = (params: Record<string, any>) =>
   `${params.oauthUrl}/oauth/authorize?${querystring.stringify(
     castToAuthorizationRequestParams(params),
   )}`

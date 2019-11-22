@@ -11,6 +11,12 @@ const testData = {
   timezone: 'Europe/Berlin',
 }
 
+const testDataUmlauts = {
+  name: 'Pröpärty',
+  readOnly: true,
+  timezone: 'Europe/Berlin',
+}
+
 describe('propertyCreate()', () => {
   it('should be able to create a new property', async () => {
     const data = { ...testData, externalId: generateId() }
@@ -60,5 +66,17 @@ describe('getProperties()', () => {
 
     const result2 = await client.getProperties(1, limit)
     expect(result2._embedded.items).toHaveLength(limit)
+  })
+
+  it('should be able to get a property with umlauts', async () => {
+    await client.propertyCreate(APP_ID, {
+      ...testDataUmlauts,
+      externalId: generateId(),
+    })
+
+    const result = await client.getProperties(undefined, undefined, {
+      name: testDataUmlauts.name,
+    })
+    expect(result._embedded.items[0].name).toEqual(testDataUmlauts.name)
   })
 })

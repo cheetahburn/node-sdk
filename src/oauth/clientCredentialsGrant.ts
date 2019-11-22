@@ -2,7 +2,9 @@ import { TokenRequester } from './types'
 
 export const GRANT_TYPE = 'client_credentials'
 
-const castClientOptionsToRequestParams = (clientOptions: IndexSignature) => {
+const castClientOptionsToRequestParams = (
+  clientOptions: Record<string, any>,
+) => {
   const { scope, clientId, clientSecret } = clientOptions
 
   if (!clientId) {
@@ -25,7 +27,7 @@ const castClientOptionsToRequestParams = (clientOptions: IndexSignature) => {
   }
 }
 
-export const isEligible = (clientOptions: IndexSignature): boolean => {
+export const isEligible = (clientOptions: Record<string, any>): boolean => {
   try {
     return !!castClientOptionsToRequestParams(clientOptions)
   } catch {
@@ -35,5 +37,5 @@ export const isEligible = (clientOptions: IndexSignature): boolean => {
 
 export const requestToken = (
   oauthTokenRequest: TokenRequester,
-  clientOptions: IndexSignature,
+  clientOptions: Record<string, any>,
 ) => oauthTokenRequest(castClientOptionsToRequestParams(clientOptions))

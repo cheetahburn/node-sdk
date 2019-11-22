@@ -7,7 +7,7 @@ import { IOAuthToken } from './types'
 const logger = makeLogger('OAuth Token Request')
 
 const makeFetchTokenRequester = (url: string) => async (
-  params: IndexSignature,
+  params: Record<string, any>,
 ): Promise<IOAuthToken> => {
   try {
     const response = await fetch(url, {
