@@ -31,6 +31,10 @@ import {
   MethodNotificationUpdateRead,
 } from './methods/notification'
 import {
+  MethodNotificationSettingsResetByUser,
+  MethodNotificationSettingsUpdateByUser,
+} from './methods/notificationSettings'
+import {
   MethodGetProperties,
   MethodPropertyCreate,
   MethodPropertyGetById,
@@ -277,6 +281,8 @@ export interface IAllthingsRestClient {
    */
   readonly groupUpdateById: MethodGroupUpdateById
 
+  // Notification settings
+
   /**
    * Get a list of units
    */
@@ -298,6 +304,16 @@ export interface IAllthingsRestClient {
    * Mark a notification as read
    */
   readonly notificationUpdateRead: MethodNotificationUpdateRead
+
+  /**
+   * Set all notification settings to default
+   */
+  readonly notificationSettingsResetByUser: MethodNotificationSettingsResetByUser
+
+  /**
+   * Change user notification-settings
+   */
+  readonly notificationSettingsUpdateByUser: MethodNotificationSettingsUpdateByUser
 
   // Property
 

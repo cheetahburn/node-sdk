@@ -81,9 +81,9 @@ describe('notificationUpdateRead()', () => {
 
     await createAdminMessage(currentUser, 'title')
 
-    const notification = (await regularClient.notificationsGetByUser(
-      regularUser.id,
-    ))._embedded.items[0]
+    const notification = (
+      await regularClient.notificationsGetByUser(regularUser.id)
+    )._embedded.items[0]
 
     expect(notification.read).toBe(false)
 

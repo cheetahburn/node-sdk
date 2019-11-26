@@ -26,20 +26,22 @@ beforeAll(async () => {
     type: EnumUnitType.rented,
   })
 
-  sharedUtilisationPeriodIds = (await Promise.all([
-    client.utilisationPeriodCreate(unit.id, {
-      endDate: '2018-01-02',
-      startDate: '2018-01-01',
-    }),
-    client.utilisationPeriodCreate(unit.id, {
-      endDate: '2018-02-02',
-      startDate: '2018-02-01',
-    }),
-    client.utilisationPeriodCreate(unit.id, {
-      endDate: '2018-03-02',
-      startDate: '2018-03-01',
-    }),
-  ])).map(item => item.id)
+  sharedUtilisationPeriodIds = (
+    await Promise.all([
+      client.utilisationPeriodCreate(unit.id, {
+        endDate: '2018-01-02',
+        startDate: '2018-01-01',
+      }),
+      client.utilisationPeriodCreate(unit.id, {
+        endDate: '2018-02-02',
+        startDate: '2018-02-01',
+      }),
+      client.utilisationPeriodCreate(unit.id, {
+        endDate: '2018-03-02',
+        startDate: '2018-03-01',
+      }),
+    ])
+  ).map(item => item.id)
 })
 
 describe('registrationCodeCreate()', async () => {

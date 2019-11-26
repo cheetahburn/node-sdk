@@ -1,4 +1,12 @@
 import { DEFAULT_API_WRAPPER_OPTIONS } from '../constants'
+import {
+  getRedirectUrl as getAuthorizationUrl,
+  requestToken as requestTokenByCode,
+} from '../oauth/authorizationCodeGrant'
+import createTokenStore from '../oauth/createTokenStore'
+import makeFetchTokenRequester from '../oauth/makeFetchTokenRequester'
+import { requestToken as performRefreshTokenGrant } from '../oauth/refreshTokenGrant'
+import requestAndSaveToStore from '../oauth/requestAndSaveToStore'
 import { partial } from '../utils/functional'
 import { pseudoRandomString } from '../utils/random'
 import httpDelete from './delete'
@@ -12,6 +20,10 @@ import {
   bucketRemoveFile,
   bucketRemoveFilesInPath,
 } from './methods/bucket'
+import {
+  conversationCreateMessage,
+  conversationGetById,
+} from './methods/conversation'
 import { fileCreate, fileDelete } from './methods/file'
 import {
   getGroups,
@@ -25,6 +37,10 @@ import {
   notificationsUpdateReadByUser,
   notificationUpdateRead,
 } from './methods/notification'
+import {
+  notificationSettingsResetByUser,
+  notificationSettingsUpdateByUser,
+} from './methods/notificationSettings'
 import {
   getProperties,
   propertyCreate,
@@ -42,6 +58,7 @@ import {
   serviceProviderGetById,
   serviceProviderUpdateById,
 } from './methods/serviceProvider'
+import { ticketCreate, ticketGetById } from './methods/ticket'
 import {
   EnumUnitObjectType,
   EnumUnitType,
@@ -90,20 +107,6 @@ import {
   IClientExposedOAuth,
 } from './types'
 
-import {
-  getRedirectUrl as getAuthorizationUrl,
-  requestToken as requestTokenByCode,
-} from '../oauth/authorizationCodeGrant'
-import createTokenStore from '../oauth/createTokenStore'
-import makeFetchTokenRequester from '../oauth/makeFetchTokenRequester'
-import { requestToken as performRefreshTokenGrant } from '../oauth/refreshTokenGrant'
-import requestAndSaveToStore from '../oauth/requestAndSaveToStore'
-import {
-  conversationCreateMessage,
-  conversationGetById,
-} from './methods/conversation'
-import { ticketCreate, ticketGetById } from './methods/ticket'
-
 const API_METHODS: ReadonlyArray<any> = [
   // Agent
   agentCreate,
@@ -127,6 +130,10 @@ const API_METHODS: ReadonlyArray<any> = [
   // File
   fileCreate,
   fileDelete,
+
+  // Notification settings
+  notificationSettingsResetByUser,
+  notificationSettingsUpdateByUser,
 
   // Group
   groupCreate,

@@ -70,10 +70,9 @@ export async function conversationCreateMessage(
       ? {
           content: {
             description: messageData.body,
-            files: (await createManyFilesSorted(
-              messageData.attachments,
-              client,
-            )).success,
+            files: (
+              await createManyFilesSorted(messageData.attachments, client)
+            ).success,
           },
           internal: false,
           type: 'file',
