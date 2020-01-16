@@ -6,7 +6,10 @@ import restClient from '..'
 const client = restClient()
 
 const CONVERSATION_ID = '5aa7cd7bd4959e004112e136'
-const USER_ID = '5a9d5ce40ecb3300413971a7'
+const CREATED_BY = {
+  type: 'email',
+  value: 'pr-coreyplatt@allthings.me',
+}
 
 describe('conversationGetById()', () => {
   it('should be able to get a conversation by ID', async () => {
@@ -21,11 +24,16 @@ describe('conversationCreateMessage()', () => {
     const content = 'some message'
     const result = await client.conversationCreateMessage(CONVERSATION_ID, {
       body: content,
-      userId: USER_ID,
+      createdBy: CREATED_BY,
     })
 
     expect(result.content.content).toEqual(content)
-    expect(result._embedded.createdBy.id).toEqual(USER_ID)
+    expect(result._embedded.createdByCommunicationMethod.value).toEqual(
+      CREATED_BY.value,
+    )
+    expect(result._embedded.createdByCommunicationMethod.type).toEqual(
+      CREATED_BY.type,
+    )
   })
 
   it('should be able to add a message to a conversation with attachments', async () => {
@@ -38,11 +46,11 @@ describe('conversationCreateMessage()', () => {
         },
       ],
       body: content,
-      userId: USER_ID,
+      createdBy: CREATED_BY,
     })
 
     expect(result.content.description).toEqual(content)
-    expect(result._embedded.createdBy.id).toEqual(USER_ID)
+    // expect(result._embedded.createdBy.id).toEqual(USER_ID)
 
     if (result.content.files) {
       expect(result.content.files.length).toEqual(1)

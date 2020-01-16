@@ -51,7 +51,11 @@ import {
   MethodServiceProviderGetById,
   MethodServiceProviderUpdateById,
 } from './methods/serviceProvider'
-import { MethodTicketCreate, MethodTicketGetById } from './methods/ticket'
+import {
+  MethodTicketCreateOnServiceProvider,
+  MethodTicketCreateOnUser,
+  MethodTicketGetById,
+} from './methods/ticket'
 import {
   MethodGetUnits,
   MethodUnitCreate,
@@ -381,7 +385,12 @@ export interface IAllthingsRestClient {
   /**
    * Create a ticket
    */
-  readonly ticketCreate: MethodTicketCreate
+  readonly ticketCreateOnUser: MethodTicketCreateOnUser
+
+  /**
+   * Create an anonymous ticket
+   */
+  readonly ticketCreateOnServiceProvider: MethodTicketCreateOnServiceProvider
 
   /**
    * Get a ticket by its ID

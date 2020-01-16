@@ -27,7 +27,7 @@ export interface IMessagePayload {
     readonly filename: string
   }>
   readonly body: string
-  readonly userId: string
+  readonly createdBy: { readonly type: string; readonly value: string }
 }
 
 export type ConversationResult = Promise<IConversation>
@@ -63,7 +63,7 @@ export async function conversationCreateMessage(
   conversationId: string,
   messageData: IMessagePayload,
 ): ConversationCreateMessageResult {
-  const url = `/v1/conversations/${conversationId}/messages?forUser=${messageData.userId}`
+  const url = `/v1/conversations/${conversationId}/messages`
 
   const payload =
     messageData.attachments && messageData.attachments.length
@@ -74,6 +74,7 @@ export async function conversationCreateMessage(
               await createManyFilesSorted(messageData.attachments, client)
             ).success,
           },
+          createdBy: messageData.createdBy,
           internal: false,
           type: 'file',
         }
@@ -81,6 +82,7 @@ export async function conversationCreateMessage(
           content: {
             content: messageData.body,
           },
+          createdBy: messageData.createdBy,
           type: 'text',
         }
 
