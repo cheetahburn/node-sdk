@@ -85,7 +85,7 @@ describe('ticketCreateOnServiceProvider()', () => {
       SERVICE_PROVIDER_ID,
       {
         category: CATEGORY_ID,
-        channel: 'app',
+        channel: 'App-575027e58178f56a008b4568',
         createdByCommunicationMethod: {
           type: 'email',
           value: 'pr-coreyplatt@allthings.me',
