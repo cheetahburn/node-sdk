@@ -1,5 +1,9 @@
 import { createManyFilesSorted } from '../../utils/upload'
-import { EnumCommunicationMethodType, IAllthingsRestClient } from '../types'
+import {
+  EnumCommunicationMethodType,
+  EnumInputChannel,
+  IAllthingsRestClient,
+} from '../types'
 
 export interface IConversation {
   readonly id: string
@@ -14,6 +18,7 @@ export interface IMessage {
   }
   readonly createdAt: string
   readonly id: string
+  readonly inputChannel?: EnumInputChannel
   readonly internal: boolean
   readonly read: boolean
   readonly type: string
@@ -31,6 +36,7 @@ export interface IMessagePayload {
     readonly type: EnumCommunicationMethodType
     readonly value: string
   }
+  readonly inputChannel?: string
 }
 
 export type ConversationResult = Promise<IConversation>
@@ -78,6 +84,7 @@ export async function conversationCreateMessage(
             ).success,
           },
           createdBy: messageData.createdBy,
+          inputChannel: messageData.inputChannel,
           internal: false,
           type: 'file',
         }
@@ -86,6 +93,7 @@ export async function conversationCreateMessage(
             content: messageData.body,
           },
           createdBy: messageData.createdBy,
+          inputChannel: messageData.inputChannel,
           type: 'text',
         }
 
