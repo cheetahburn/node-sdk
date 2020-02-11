@@ -139,153 +139,93 @@ async function makeResultFromResponse(
 }
 
 /**
- * Determine if the result was successful. Here, successful means
- * a non-retryable code (e.g. not 429, or 502-504 error).
- */
-export function responseWasSuccessful(response: Response): boolean {
-  return !RETRYABLE_STATUS_CODES.includes(response.status)
-}
-
-/**
  * Perform an API request. The request is passed to the queue from where it is
  * queued and scheduled for execution. When a request fails with a retryable
  * statusCode, the request is retried up to REQUEST_MAX_RETRIES times. Retries
  * are implemented with exponential-backing off strategy with jitter.
  */
-export function makeApiRequest(
-  oauthTokenStore: ITokenStore,
-  oauthTokenRequester: TokenRequester,
-  options: IAllthingsRestClientOptions,
+const makeApiRequest = async (
+  apiUrl: string,
+  accessToken: string,
   httpMethod: HttpVerb,
   apiMethod: string,
   payload?: IRequestOptions,
-): (previousResult: any, iteration: number) => Promise<Response> {
-  return async (previousResult, retryCount) => {
-    if (retryCount > 0) {
-      if (retryCount > options.requestMaxRetries) {
-        const error = `Maximum number of retries reached while retrying ${previousResult.method} request ${previousResult.path}.`
+) =>
+  refillReservoir() &&
+  queue.schedule(async () => {
+    const method = httpMethod.toUpperCase()
+    const payloadQuery =
+      payload && payload.query
+        ? (apiMethod.includes('?') ? '&' : '?') +
+          querystring.stringify(payload.query)
+        : ''
+    const url = `${apiUrl}/api${apiMethod}${payloadQuery}`
+    const body = payload && payload.body
+    const hasForm = isFormData(body)
+    const form = isFormData(body) ? body.formData : {}
+    const formData = Object.entries(form).reduce((previous, [name, value]) => {
+      // tslint:disable-next-line
+      previous.append.apply(previous, [name].concat(value))
 
-        // tslint:disable-next-line:no-expression-statement
-        requestLogger.error(error)
+      return previous
+    }, new FormDataModule())
 
-        throw new Error(error)
-      }
+    const headers = {
+      accept: 'application/json',
+      authorization: `Bearer ${accessToken}`,
+      ...(!hasForm ? { 'content-type': 'application/json' } : {}),
 
-      // tslint:disable-next-line:no-expression-statement
-      requestLogger.warn(
-        `Warning: encountered ${previousResult.status}. Retrying ${previousResult.method} request ${previousResult.path} (retry #${retryCount}).`,
-      )
+      // don't use unsafe header "user-agent" in browser
+      ...(typeof window === 'undefined' && { 'user-agent': USER_AGENT }),
 
-      // disabling linter here for better readabiliy
-      // tslint:disable-next-line:no-expression-statement
-      await sleep(
-        Math.ceil(
-          Math.random() * // adds jitter
-            options.requestBackOffInterval *
-            2 ** retryCount, // exponential backoff
-        ),
-      )
+      // user overrides
+      ...(payload && payload.headers ? payload.headers : {}),
+
+      // content-type header overrides given FormData
+      ...(hasForm ? formData.getHeaders() : {}),
     }
 
+    // Log the request including raw body
     // tslint:disable-next-line:no-expression-statement
-    await maybeUpdateToken(
-      oauthTokenStore,
-      oauthTokenRequester,
-      options,
-      retryCount > 0 &&
-        TOKEN_REFRESH_STATUS_CODES.includes(previousResult.status),
-    )
+    requestLogger.log(method, url, {
+      body,
+      headers,
+    })
 
-    if (!oauthTokenStore.get('accessToken')) {
-      throw new Error('Unable to get OAuth2 access token.')
+    const requestBody = {
+      // "form-data" module is missing some methods to be compliant with
+      // w3c FormData spec, however it works fine here.
+      body: hasForm ? (formData as any) : JSON.stringify(body),
     }
 
-    try {
-      return (
-        refillReservoir() &&
-        (await queue.schedule(async () => {
-          const method = httpMethod.toUpperCase()
-          const payloadQuery =
-            payload && payload.query
-              ? (apiMethod.includes('?') ? '&' : '?') +
-                querystring.stringify(payload.query)
-              : ''
-          const url = `${options.apiUrl}/api${apiMethod}${payloadQuery}`
-          const body = payload && payload.body
-          const hasForm = isFormData(body)
-          const form = isFormData(body) ? body.formData : {}
-          const formData = Object.entries(form).reduce(
-            (previous, [name, value]) => {
-              // tslint:disable-next-line
-              previous.append.apply(previous, [name].concat(value))
+    return fetch(url, {
+      cache: 'no-cache',
+      credentials: 'omit',
 
-              return previous
-            },
-            new FormDataModule(),
-          )
+      headers,
+      method,
+      mode: 'cors',
 
-          const headers = {
-            accept: 'application/json',
-            authorization: `Bearer ${oauthTokenStore.get('accessToken')}`,
-            ...(!hasForm ? { 'content-type': 'application/json' } : {}),
+      ...(hasForm || body ? requestBody : {}),
+    })
 
-            // don't use unsafe header "user-agent" in browser
-            ...(typeof window === 'undefined' && { 'user-agent': USER_AGENT }),
+    // const result = await makeResultFromResponse(response)
 
-            // user overrides
-            ...(payload && payload.headers ? payload.headers : {}),
+    // // Log the response
+    // // tslint:disable-next-line:no-expression-statement
+    // responseLogger.log(
+    //   method,
+    //   url,
+    //   result instanceof Error
+    //     ? { error: result }
+    //     : {
+    //         body: result.body,
+    //         status: response.status,
+    //       },
+    // )
 
-            // content-type header overrides given FormData
-            ...(hasForm ? formData.getHeaders() : {}),
-          }
-
-          // Log the request including raw body
-          // tslint:disable-next-line:no-expression-statement
-          requestLogger.log(method, url, {
-            body,
-            headers,
-          })
-
-          const requestBody = {
-            // "form-data" module is missing some methods to be compliant with
-            // w3c FormData spec, however it works fine here.
-            body: hasForm ? (formData as any) : JSON.stringify(body),
-          }
-
-          const response = await fetch(url, {
-            cache: 'no-cache',
-            credentials: 'omit',
-
-            headers,
-            method,
-            mode: 'cors',
-
-            ...(hasForm || body ? requestBody : {}),
-          })
-
-          const result = await makeResultFromResponse(response)
-
-          // Log the response
-          // tslint:disable-next-line:no-expression-statement
-          responseLogger.log(
-            method,
-            url,
-            result instanceof Error
-              ? { error: result }
-              : {
-                  body: result.body,
-                  status: response.status,
-                },
-          )
-
-          return result
-        }))
-      )
-    } catch (error) {
-      return error
-    }
-  }
-}
+    // return result
+  })
 
 /**
  * Perform a request. If an access token is not provided, or has not previously been
@@ -300,23 +240,74 @@ export default async function request(
   apiMethod: string,
   payload?: IRequestOptions,
 ): RequestResult {
+  type IterationEntity = Response | Error
+
   /*
     Make the API request. If the response was a 503, we retry the request
     while backing off exponentially +REQUEST_BACK_OFF_INTERVAL milliseconds
     on each retry until we reach REQUEST_MAX_RETRIES at which point throw an error.
   */
-
   const result = await until(
-    responseWasSuccessful,
-    makeApiRequest(
-      oauthTokenStore,
-      oauthTokenRequester,
-      options,
-      httpMethod,
-      apiMethod,
-      payload,
-    ),
+    (currentResult: IterationEntity) =>
+      currentResult instanceof Error ||
+      (currentResult instanceof Response &&
+        !RETRYABLE_STATUS_CODES.includes(currentResult.status)),
+
+    async (previousResult: IterationEntity | undefined, iterationCount) => {
+      // TODO: error handling around
+      if (iterationCount > 0) {
+        // disabling linter here for better readabiliy
+
+        if (iterationCount >= options.requestMaxRetries) {
+          // TODO: refine
+          return new Error('Maximum number of retries reached')
+        }
+        // tslint:disable-next-line:no-expression-statement
+        await sleep(
+          Math.ceil(
+            Math.random() * // adds jitter
+              options.requestBackOffInterval *
+              2 ** iterationCount, // exponential backoff
+          ),
+        )
+      }
+
+      try {
+        // tslint:disable-next-line:no-expression-statement
+        await maybeUpdateToken(
+          oauthTokenStore,
+          oauthTokenRequester,
+          options,
+          previousResult instanceof Response &&
+            TOKEN_REFRESH_STATUS_CODES.includes(previousResult.status),
+        )
+      } catch (error) {
+        // TODO: refine
+        return new Error(`Failed to refresh access token: ${error.message}`)
+      }
+
+      const accessToken = oauthTokenStore.get('accessToken')
+      if (!accessToken) {
+        // TODO: refine
+        return new Error('No access token to perform the request')
+      }
+
+      try {
+        return makeApiRequest(
+          options.apiUrl,
+          accessToken,
+          httpMethod,
+          apiMethod,
+          payload,
+        )
+      } catch (error) {
+        // TODO: refine
+        return new Error('No access token to perform the request')
+      }
+    },
   )
+
+  // need to know what was the reason for iteration to stop
 
   if (result instanceof Error) {
     // tslint:disable-next-line:no-expression-statement
@@ -325,5 +316,6 @@ export default async function request(
     throw result
   }
 
+  // todo: make result from response
   return result.body
 }
