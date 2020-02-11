@@ -1,4 +1,5 @@
 import querystring from 'query-string'
+import { IOAuthToken } from './types'
 
 export const RESPONSE_TYPE = 'token'
 
@@ -34,3 +35,38 @@ export const getRedirectUrl = (params: Record<string, any>) =>
   `${params.oauthUrl}/oauth/authorize?${querystring.stringify(
     castToAuthorizationRequestParams(params),
   )}`
+
+export const extractOAuthTokenFromUrl = (url: string): IOAuthToken | null => {
+  const {
+    access_token: accessToken,
+    expires_in: expiresIn,
+  } = querystring.parse(url)
+
+  return accessToken
+    ? {
+        accessToken:
+          accessToken instanceof Array ? accessToken[0] : accessToken,
+        ...(expiresIn
+          ? {
+              expiresIn: parseInt(
+                expiresIn instanceof Array ? expiresIn[0] : expiresIn,
+                10,
+              ),
+            }
+          : {}),
+      }
+    : null
+}
+
+export const stripOAuthTokenFromLocation = (location: Location) => {
+  const {
+    access_token: accessToken,
+    expires_in: expiresIn,
+    token_type,
+    scope,
+    state,
+    ...rest
+  } = querystring.parse(location.hash)
+
+  location.hash = querystring.stringify(rest)
+}

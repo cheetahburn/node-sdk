@@ -78,4 +78,61 @@ describe('OAuth implicit grant', () => {
       expect(url).toContain(`scope=${encodeURIComponent(scope!)}`)
     })
   })
+
+  describe('extractOAuthTokenFromUrl', () => {
+    it('extracts data only if access_token was provided', () => {
+      expect(
+        implicitGrant.extractOAuthTokenFromUrl('#expires_in=3600'),
+      ).toBeNull()
+    })
+
+    it('extracts accessToken from url', () => {
+      expect(
+        implicitGrant.extractOAuthTokenFromUrl('#access_token=1234'),
+      ).toEqual({
+        accessToken: '1234',
+      })
+    })
+
+    it('handles multiple occurrences of accessToken in the url', () => {
+      expect(
+        implicitGrant.extractOAuthTokenFromUrl(
+          '#access_token=1234&access_token=12345',
+        ),
+      ).toEqual({
+        accessToken: '1234',
+      })
+    })
+
+    it('extracts expiresIn if it is provided', () => {
+      expect(
+        implicitGrant.extractOAuthTokenFromUrl(
+          '#access_token=1234&access_token=12345&expires_in=3600',
+        ),
+      ).toEqual({
+        accessToken: '1234',
+        expiresIn: 3600,
+      })
+    })
+
+    it('handles multiple occurrences of expiresIn in the url', () => {
+      expect(
+        implicitGrant.extractOAuthTokenFromUrl(
+          '#access_token=1234&access_token=12345&expires_in=3600&&expires_in=7200',
+        ),
+      ).toEqual({
+        accessToken: '1234',
+        expiresIn: 3600,
+      })
+    })
+  })
+
+  describe('stripOAuthTokenFromLocation', () => {
+    it('removes oauth-related params from location hash', () => {
+      location.hash =
+        'param1=val1&access_token=1234&access_token=12345&expires_in=3600&scope=test&state=tzxvsfpwe&param2=val2'
+      implicitGrant.stripOAuthTokenFromLocation(location)
+      expect(location.hash).toEqual('#param1=val1&param2=val2')
+    })
+  })
 })
