@@ -1,3 +1,5 @@
+import sleep from './sleep'
+
 /*
   Small collection of functional-programming-esque utility functions.
   E.g. ES2017+ "Rambda" lite.
@@ -44,4 +46,30 @@ export function fnClearInterval(intervalId: NodeJS.Timeout): true {
   clearInterval(intervalId)
 
   return true
+}
+
+export async function retry<T>(
+  fn: () => T,
+  maxRetries: number,
+  backoffIterval: number,
+  iterationCount = 0,
+): Promise<T> {
+  try {
+    return await fn()
+  } catch (err) {
+    if (iterationCount >= maxRetries) {
+      throw err
+    }
+
+    // tslint:disable-next-line:no-expression-statement
+    await sleep(
+      Math.ceil(
+        Math.random() * // adds jitter
+          backoffIterval *
+          2 ** iterationCount, // exponential backoff
+      ),
+    )
+
+    return retry(fn, maxRetries, backoffIterval, iterationCount + 1)
+  }
 }
