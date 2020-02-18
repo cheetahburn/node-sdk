@@ -65,6 +65,7 @@ import {
 import {
   MethodGetCurrentUser,
   MethodGetUsers,
+  MethodUserChangePassword,
   MethodUserCheckInToUtilisationPeriod,
   MethodUserCreate,
   MethodUserCreatePermission,
@@ -91,6 +92,7 @@ import {
 } from './methods/utilisationPeriod'
 import { MethodHttpPatch } from './patch'
 import { MethodHttpPost } from './post'
+import { MethodHttpPut } from './put'
 
 // Describes the possible resources which exist in the API
 export enum EnumResource {
@@ -204,6 +206,7 @@ export interface IAllthingsRestClient {
   readonly get: MethodHttpGet
   readonly post: MethodHttpPost
   readonly patch: MethodHttpPatch
+  readonly put: MethodHttpPut
 
   readonly oauth: IClientExposedOAuth
 
@@ -464,6 +467,11 @@ export interface IAllthingsRestClient {
    * Get the current user from active session
    */
   readonly getCurrentUser: MethodGetCurrentUser
+
+  /**
+   * Change a user's password
+   */
+  readonly userChangePassword: MethodUserChangePassword
 
   /**
    * Give a user a permission/role on an given object of specified type
