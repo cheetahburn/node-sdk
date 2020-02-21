@@ -89,7 +89,7 @@
     "semantic-release": "15.14.0",
     "ts-jest": "25.2.1",
     "tslint": "5.20.1",
-    "typescript": "3.7.5"
+    "typescript": "3.8.2"
   },
   "prettier": {
     "printWidth": 80,
