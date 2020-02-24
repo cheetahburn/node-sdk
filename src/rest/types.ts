@@ -80,6 +80,7 @@ import {
 import {
   MethodUserRelationCreate,
   MethodUserRelationDelete,
+  MethodUserRelationsGetByUser
 } from './methods/userRelation'
 import {
   MethodUtilisationPeriodAddRegistrationCode,
@@ -135,7 +136,7 @@ export enum EnumTimezone {
 }
 
 export enum EnumServiceProviderType {
-  serviceProvider = 'service-provider',
+  propertyManager = 'property-manager',
   craftspeople = 'craftspeople',
 }
 
@@ -520,6 +521,11 @@ export interface IAllthingsRestClient {
    * Deletes a new user relation
    */
   readonly userRelationDelete: MethodUserRelationDelete
+
+  /**
+   * Get a list of user's current responsibilities - jobRoles
+   */
+  readonly userRelationsGetByUser: MethodUserRelationsGetByUser
 
   // Utilisation Period
 
