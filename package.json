@@ -75,7 +75,7 @@
     "form-data": "3.0.0",
     "husky": "4.2.3",
     "jest": "25.2.3",
-    "lint-staged": "10.0.9",
+    "lint-staged": "10.0.10",
     "nanoid": "2.1.11",
     "prettier": "1.19.1",
     "rimraf": "3.0.2",
