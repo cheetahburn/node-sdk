@@ -72,7 +72,7 @@
     "@types/query-string": "6.2.0",
     "coveralls": "3.0.11",
     "form-data": "3.0.0",
-    "husky": "4.2.3",
+    "husky": "4.2.5",
     "jest": "25.2.7",
     "lint-staged": "10.1.2",
     "nanoid": "3.0.2",
