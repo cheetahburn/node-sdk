@@ -324,7 +324,10 @@ export default async function request(
     // tslint:disable-next-line:no-expression-statement
     requestLogger.log('Request Error', result, payload)
 
-    throw result
+    // tslint:disable-next-line:no-unused-expression no-expression-statement
+    if (!returnRawResultObject) {
+      throw result
+    }
   }
 
   return returnRawResultObject ? result : result.body
