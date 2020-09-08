@@ -118,12 +118,14 @@ describe('getCurrentUser()', () => {
 })
 
 describe('userCreate()', () => {
-  it('should be able to create a new user', async () => {
+  it.only('should be able to create a new user', async () => {
     const data = {
       ...testData,
+      code: 'my regcode',
       email: generateId() + '@foobar.test',
       externalId: generateId(),
       plainPassword: generateId(),
+      sendInvitation: false,
     }
     const result = await client.userCreate(APP_ID, generateId(), data)
 
