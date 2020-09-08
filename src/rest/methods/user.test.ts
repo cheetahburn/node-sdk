@@ -118,7 +118,7 @@ describe('getCurrentUser()', () => {
 })
 
 describe('userCreate()', () => {
-  it.only('should be able to create a new user', async () => {
+  it('should be able to create a new user', async () => {
     const data = {
       ...testData,
       code: 'my regcode',
