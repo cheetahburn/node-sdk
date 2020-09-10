@@ -128,7 +128,7 @@ describe('userCreate()', () => {
   it('should be able to create a new user', async () => {
     const data = {
       ...testData,
-      code: 'my regcode',
+      code: generateId() + '_regcode',
       company: APP_PROPERTY_MANAGER_ID,
       email: generateId() + '@foobar.test',
       externalId: generateId(),
@@ -378,40 +378,5 @@ describe('userGetByEmail()', () => {
     users._embedded.items.forEach((user) => {
       expect(user.email).toEqual(user1.email)
     })
-  })
-})
-
-describe('userChangePassword()', () => {
-  it("should be able to change a user's password", async () => {
-    // Password must be 32 characters or more for Allthings users!
-    const password = 'foobar-password-long-enough-to-make-the-api-happy'
-    const user = await client.getCurrentUser()
-
-    const resultChangePassword = await client.userChangePassword(
-      user.id,
-      process.env.ALLTHINGS_OAUTH_PASSWORD as string,
-      password,
-    )
-
-    const resultChangePasswordAgain = await client.userChangePassword(
-      user.id,
-      password,
-      process.env.ALLTHINGS_OAUTH_PASSWORD as string,
-    )
-
-    expect(resultChangePassword).toBe(true)
-    expect(resultChangePasswordAgain).toBe(true)
-  })
-
-  it('should throw when the current password is wrong', async () => {
-    const user = await client.getCurrentUser()
-
-    expect(
-      client.userChangePassword(
-        user.id,
-        'not-current-password',
-        'foobar-password',
-      ),
-    ).rejects.toThrow()
   })
 })
