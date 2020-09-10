@@ -75,6 +75,7 @@ import {
   EnumCommunicationPreferenceChannel,
   EnumUserPermissionObjectType,
   EnumUserPermissionRole,
+  EnumUserType,
   getCurrentUser,
   getUsers,
   userChangePassword,
@@ -93,7 +94,7 @@ import {
   EnumUserRelationType,
   userRelationCreate,
   userRelationDelete,
-  userRelationsGetByUser
+  userRelationsGetByUser,
 } from './methods/userRelation'
 import {
   EnumUtilisationPeriodType,
@@ -222,6 +223,7 @@ export {
   EnumUnitType,
   EnumUserPermissionObjectType,
   EnumUserRelationType,
+  EnumUserType,
   EnumUtilisationPeriodType,
 }
 
