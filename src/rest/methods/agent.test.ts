@@ -43,7 +43,7 @@ describe('agentCreate()', () => {
     expect(result.email).toEqual(data.email)
     expect(result.externalId).toEqual(data.externalId)
     expect(result.roles).toEqual([])
-    expect(result.type).toEqual(EnumUserType.customer)
+    expect(result.type).toEqual(EnumUserType.agent)
 
     const {
       _embedded: { items: managerAgents },
@@ -119,7 +119,7 @@ describe('agentCreate()', () => {
     expect(result.email).toEqual(data.email)
     expect(result.externalId).toEqual(data.externalId)
     expect(result.roles).toEqual([])
-    expect(result.type).toEqual(EnumUserType.customer)
+    expect(result.type).toEqual(EnumUserType.agent)
 
     const {
       _embedded: { items: managerAgents },
@@ -186,7 +186,7 @@ describe('agentCreatePermissions()', () => {
     expect(agentPermissions).toBeTruthy()
     expect(agentPermissions).toHaveLength(4)
     // expect each role to equal the ones we added
-    agentPermissions.map(permission => {
+    agentPermissions.map((permission) => {
       expect(
         [
           EnumUserPermissionRole.bookingAgent,
@@ -197,7 +197,7 @@ describe('agentCreatePermissions()', () => {
       )
     })
     // expect appAdmin + pinboardAgent permissions to be timeboxed
-    agentPermissions.map(permission => {
+    agentPermissions.map((permission) => {
       if (
         [
           EnumUserPermissionRole.appAdmin,

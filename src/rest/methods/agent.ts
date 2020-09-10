@@ -40,7 +40,7 @@ export async function agentCreate(
 ): UserResult {
   const user = await client.userCreate(appId, username, {
     ...data,
-    type: EnumUserType.customer,
+    type: EnumUserType.agent,
   })
   const manager = await client.post(
     `/v1/property-managers/${propertyManagerId}/users`,

@@ -16,6 +16,10 @@ export enum EnumUserType {
   demoContent = 'demo_content',
   demoPublic = 'demo_public',
   partner = 'partner',
+  agent = 'agent',
+  tenant = 'tenant',
+  externalAgent = 'external-agent',
+  serviceUser = 'service-user',
 }
 
 export enum EnumCommunicationPreferenceChannel {
