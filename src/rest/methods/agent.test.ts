@@ -43,7 +43,6 @@ describe('agentCreate()', () => {
     expect(result.inviteEmailSent).toBeTruthy()
     expect(result.email).toEqual(data.email)
     expect(result.externalId).toEqual(data.externalId)
-    expect(result.roles).toEqual([])
     expect(result.type).toEqual(EnumUserType.agent)
 
     const {
@@ -68,6 +67,7 @@ describe('agentCreate()', () => {
       ...testData,
       email: generateId() + '@foobar.test',
       externalId: generateId(),
+      sendInvitation: false,
     }
 
     const agent = await client.agentCreate(
@@ -117,7 +117,6 @@ describe('agentCreate()', () => {
 
     expect(result.email).toEqual(data.email)
     expect(result.externalId).toEqual(data.externalId)
-    expect(result.roles).toEqual([])
     expect(result.type).toEqual(EnumUserType.agent)
 
     const {
