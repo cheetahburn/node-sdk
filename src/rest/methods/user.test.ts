@@ -23,6 +23,7 @@ describe('getUsers()', () => {
       times(
         () => ({
           ...testData,
+          company: APP_PROPERTY_MANAGER_ID,
           email: generateId() + '@foobar.test',
           externalId: generateId(),
           plainPassword: generateId(),
@@ -40,11 +41,13 @@ describe('getUsers()', () => {
 
   it('should be able find many users by their email address', async () => {
     const user1 = await client.userCreate(APP_ID, generateId(), {
+      company: APP_PROPERTY_MANAGER_ID,
       email: `${generateId()}@email.test`,
       locale: EnumLocale.de_DE,
     })
 
     const user2 = await client.userCreate(APP_ID, generateId(), {
+      company: APP_PROPERTY_MANAGER_ID,
       email: `${generateId()}@email.test`,
       locale: EnumLocale.de_DE,
     })
@@ -65,11 +68,13 @@ describe('getUsers()', () => {
     const email2 = `canonicalized${generateId()}@email.test`
 
     const user1 = await client.userCreate(APP_ID, generateId(), {
+      company: APP_PROPERTY_MANAGER_ID,
       email: email1,
       locale: EnumLocale.de_DE,
     })
 
     const user2 = await client.userCreate(APP_ID, generateId(), {
+      company: APP_PROPERTY_MANAGER_ID,
       email: email2,
       locale: EnumLocale.de_DE,
     })
@@ -87,12 +92,14 @@ describe('getUsers()', () => {
 
   it('should find users with multiple search filters', async () => {
     const user1 = await client.userCreate(APP_ID, generateId(), {
+      company: APP_PROPERTY_MANAGER_ID,
       email: `${generateId()}@email.test`,
       externalId: '123',
       locale: EnumLocale.de_DE,
     })
 
     const user2 = await client.userCreate(APP_ID, generateId(), {
+      company: APP_PROPERTY_MANAGER_ID,
       email: `${generateId()}@email.test`,
       externalId: '321',
       locale: EnumLocale.de_DE,
@@ -122,6 +129,7 @@ describe('userCreate()', () => {
     const data = {
       ...testData,
       code: 'my regcode',
+      company: APP_PROPERTY_MANAGER_ID,
       email: generateId() + '@foobar.test',
       externalId: generateId(),
       plainPassword: generateId(),
@@ -130,6 +138,7 @@ describe('userCreate()', () => {
     const result = await client.userCreate(APP_ID, generateId(), data)
 
     expect(result.email).toEqual(data.email)
+    expect(result.company).toEqual(data.company)
     expect(result.externalId).toEqual(data.externalId)
   })
 })
@@ -138,6 +147,7 @@ describe('userGetById()', () => {
   it('should be able to get a user by their ID', async () => {
     const data = {
       ...testData,
+      company: APP_PROPERTY_MANAGER_ID,
       email: generateId() + '@foobar.test',
       externalId: generateId(),
       plainPassword: generateId(),
@@ -154,6 +164,7 @@ describe('userUpdateById()', () => {
   it('should be able to update a user by their ID', async () => {
     const initialData = {
       ...testData,
+      company: APP_PROPERTY_MANAGER_ID,
       email: generateId() + '@foobar.test',
       externalId: generateId(),
       plainPassword: generateId(),
@@ -166,9 +177,6 @@ describe('userUpdateById()', () => {
     const updateData = {
       externalId: generateId(),
       locale: EnumLocale.de_DE,
-      tenantIds: {
-        '5bc50de00000000000000000': '4526f2c8-a846-496f-9fbd-61182893518a',
-      },
     }
 
     const result = await client.userUpdateById(user.id, updateData)
@@ -181,6 +189,7 @@ describe('userCreatePermission()', () => {
   it('should be able to add a permission to a user', async () => {
     const initialData = {
       ...testData,
+      company: APP_PROPERTY_MANAGER_ID,
       email: generateId() + '@foobar.test',
       externalId: generateId(),
       plainPassword: generateId(),
@@ -208,6 +217,7 @@ describe('userGetPermissions()', () => {
   it('should be able to list permissions of a user', async () => {
     const initialData = {
       ...testData,
+      company: APP_PROPERTY_MANAGER_ID,
       email: generateId() + '@foobar.test',
       externalId: generateId(),
       plainPassword: generateId(),
@@ -236,6 +246,7 @@ describe('userDeletePermission()', () => {
   it('should be able to delete a user permission', async () => {
     const initialData = {
       ...testData,
+      company: APP_PROPERTY_MANAGER_ID,
       email: generateId() + '@foobar.test',
       externalId: generateId(),
       plainPassword: generateId(),
@@ -302,6 +313,7 @@ describe('userGetUtilisationPeriods()', () => {
     const userEmail = generateId() + '@test.com'
 
     const user = await client.userCreate(APP_ID, generateId(), {
+      company: APP_PROPERTY_MANAGER_ID,
       email: userEmail,
       locale: EnumLocale.de_DE,
       plainPassword: generateId(),
@@ -320,6 +332,7 @@ describe('userGetUtilisationPeriods()', () => {
     it('should be able to add rope permissions to a user', async () => {
       const initialData = {
         ...testData,
+        company: APP_PROPERTY_MANAGER_ID,
         email: generateId() + '@foobar.test',
         externalId: generateId(),
       }
@@ -347,11 +360,13 @@ describe('userGetUtilisationPeriods()', () => {
 describe('userGetByEmail()', () => {
   it('should be able to search users by email address', async () => {
     const user1 = await client.userCreate(APP_ID, generateId(), {
+      company: APP_PROPERTY_MANAGER_ID,
       email: `${generateId()}@email.test`,
       locale: EnumLocale.de_DE,
     })
 
     await client.userCreate(APP_ID, generateId(), {
+      company: APP_PROPERTY_MANAGER_ID,
       email: `${generateId()}@email.test`,
       locale: EnumLocale.de_DE,
     })
