@@ -74,7 +74,6 @@ describe('agentCreate()', () => {
       APP_PROPERTY_MANAGER_ID,
       generateId(),
       data,
-      false,
     )
     const result = await client.userGetById(agent.id)
     expect(result.inviteEmailSent).toBeFalsy()
@@ -110,7 +109,6 @@ describe('agentCreate()', () => {
       APP_PROPERTY_MANAGER_ID,
       generateId(),
       data,
-      true,
       externalAgentCompany.id,
     )
 
@@ -152,7 +150,6 @@ describe('agentCreatePermissions()', () => {
       APP_PROPERTY_MANAGER_ID,
       generateId(),
       data,
-      false,
     )
 
     const agentAppPermissionResult = await client.agentCreatePermissions(

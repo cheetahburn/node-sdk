@@ -33,6 +33,7 @@ export interface IUser {
     readonly event: string
   }>
   readonly createdAt: string
+  readonly company: string
   readonly deletionRequestedAt: string | null
   readonly description: string
   readonly email: string
