@@ -383,11 +383,11 @@ export async function userCheckInToUtilisationPeriod(
   userId: string,
   utilisationPeriodId: string,
 ): UtilisationPeriodResult {
-  const { email: userEmail } = await client.userGetById(userId)
-
-  return client.utilisationPeriodCheckInUser(utilisationPeriodId, {
-    email: userEmail,
-  })
+  return (
+    (await client.post(`/v1/utilisation-periods/${utilisationPeriodId}/users`, {
+      user: userId,
+    })) && client.utilisationPeriodGetById(utilisationPeriodId)
+  )
 }
 
 /*
