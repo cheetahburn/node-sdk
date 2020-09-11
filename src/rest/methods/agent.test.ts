@@ -67,7 +67,6 @@ describe('agentCreate()', () => {
       ...testData,
       email: generateId() + '@foobar.test',
       externalId: generateId(),
-      sendInvitation: false,
     }
 
     const agent = await client.agentCreate(
