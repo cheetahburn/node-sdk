@@ -48,6 +48,7 @@ import {
   propertyUpdateById,
 } from './methods/property'
 import {
+  getRegistrationCodes,
   registrationCodeCreate,
   registrationCodeDelete,
   registrationCodeGetById,
@@ -170,6 +171,7 @@ const API_METHODS: ReadonlyArray<any> = [
   serviceProviderUpdateById,
 
   // Registration Code
+  getRegistrationCodes,
   registrationCodeCreate,
   registrationCodeUpdateById,
   registrationCodeDelete,

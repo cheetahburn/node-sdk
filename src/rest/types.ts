@@ -41,6 +41,7 @@ import {
   MethodPropertyUpdateById,
 } from './methods/property'
 import {
+  MethodGetRegistrationCodes,
   MethodRegistrationCodeCreate,
   MethodRegistrationCodeDelete,
   MethodRegistrationCodeGetById,
@@ -404,6 +405,11 @@ export interface IAllthingsRestClient {
    * Delete a registration code by it
    */
   readonly registrationCodeDelete: MethodRegistrationCodeDelete
+
+  /**
+   * Get a list of registration codes
+   */
+  readonly getRegistrationCodes: MethodGetRegistrationCodes
 
   // ticket
 
