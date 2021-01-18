@@ -131,6 +131,27 @@ describe('Request', () => {
     }).toThrow('Response content type was "text/html" but expected JSON')
   })
 
+  it('should clone response when response code is one of RETRYABLE_STATUS_CODES', async () => {
+    const cloned = { text: () => '' }
+
+    mockFetch.mockResolvedValueOnce({
+      clone: () => cloned,
+      headers: new Map([['content-type', 'text/html']]),
+      ok: true,
+      status: 503,
+    })
+
+    const response = await makeApiRequest(
+      mockTokenStore,
+      fakeOauthTokenFetcher,
+      DEFAULT_API_WRAPPER_OPTIONS,
+      'get',
+      '',
+    )({}, 0)
+
+    expect(response).toEqual(cloned)
+  })
+
   it('should should call maybeUpdateToken with mustRefresh argument is previous status was 401', async () => {
     const options = DEFAULT_API_WRAPPER_OPTIONS
     await makeApiRequest(
