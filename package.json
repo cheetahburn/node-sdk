@@ -46,7 +46,7 @@
     "prebuild": "npm run clean",
     "build": "tsc -d && cp package.json dist/ && rollup -c && rm dist/package.json",
     "dev": "tsc -w",
-    "preversion": "git pull && yarn check --integrity && yarn security-check && yarn lint && yarn test",
+    "preversion": "git pull && yarn check --integrity && yarn security-check && yarn lint",
     "postversion": "git push --tags origin HEAD",
     "prepublishOnly": "npm run build",
     "prettier": "prettier --write",
