@@ -23,3 +23,14 @@ describe('appGetById()', () => {
     expect(result.id).toEqual(APP_ID)
   })
 })
+
+describe('activeUnitsGetByAppId()', () => {
+  it('should get the active units of an app by id', async () => {
+    const result = await client.activeUnitsGetByAppId(
+      '5832debdfe7fc33f008b4569',
+    )
+
+    expect(result.id).toEqual('5832debdfe7fc33f008b4569')
+    expect(result.activeUnitCount).toEqual(0)
+  })
+})
