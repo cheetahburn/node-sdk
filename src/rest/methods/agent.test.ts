@@ -42,7 +42,6 @@ describe('agentCreate()', () => {
     expect(result.inviteEmailSent).toBeTruthy()
     expect(result.email).toEqual(data.email)
     expect(result.externalId).toEqual(data.externalId)
-    expect(result.roles).toEqual([])
     expect(result.type).toEqual(EnumUserType.customer)
 
     const {
@@ -118,7 +117,6 @@ describe('agentCreate()', () => {
 
     expect(result.email).toEqual(data.email)
     expect(result.externalId).toEqual(data.externalId)
-    expect(result.roles).toEqual([])
     expect(result.type).toEqual(EnumUserType.customer)
 
     const {

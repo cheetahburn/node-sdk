@@ -11,6 +11,10 @@ steps:
     command: bin/docker-node.sh yarn security-check
     agents:
       queue: default
+    retry:
+      automatic:
+        exit_status: "*"
+        limit: 3
 
   - name: build
     <<: *common
@@ -40,7 +44,7 @@ steps:
     <<: *common
     command: >
       bin/artifacts-download.sh &&
-      git remote set-url origin https://github.com/allthings/node-sdk.git && 
+      git remote set-url origin https://github.com/allthings/node-sdk.git &&
       git checkout master &&
       git pull &&
       bin/docker-node.sh yarn semantic-release
