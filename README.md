@@ -28,7 +28,7 @@ const client = allthings.restClient({
 
 client
   .getCurrentUser()
-  .then(viewer => console.log(`Welcome back ${viewer.username}!`))
+  .then((viewer) => console.log(`Welcome back ${viewer.username}!`))
 ```
 
 <!--
@@ -83,7 +83,7 @@ const client = allthings.restClient({
 
 client
   .getCurrentUser()
-  .then(viewer => console.log(`Welcome back ${viewer.username}!`))
+  .then((viewer) => console.log(`Welcome back ${viewer.username}!`))
 ```
 
 ## OAuth Authorization Code Grant Example
@@ -249,12 +249,17 @@ export interface IAllthingsRestClient {
    */
   readonly appCreate: MethodAppCreate
 
-  // ID Lookup
+  // Booking
 
   /**
-   * Map one or more externalId's to API ObjectId's within the scope of a specified App
+   * Get a booking by its ID
    */
-  readonly lookupIds: MethodLookupIds
+  readonly bookingGetById: MethodBookingGetById
+
+  /**
+   * Update a booking by its ID
+   */
+  readonly bookingUpdateById: MethodBookingUpdateById
 
   // Group
 
@@ -272,6 +277,13 @@ export interface IAllthingsRestClient {
    * Update a group by its ID
    */
   readonly groupUpdateById: MethodGroupUpdateById
+
+  // ID Lookup
+
+  /**
+   * Map one or more externalId's to API ObjectId's within the scope of a specified App
+   */
+  readonly lookupIds: MethodLookupIds
 
   // Notification
 
