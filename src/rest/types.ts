@@ -99,6 +99,11 @@ import { MethodHttpPatch } from './patch'
 import { MethodHttpPost } from './post'
 import { MethodHttpPut } from './put'
 
+import {
+  MethodBookingGetById,
+  MethodBookingUpdateById,
+} from './methods/booking'
+
 // Describes the possible resources which exist in the API
 export enum EnumResource {
   group = 'group',
@@ -572,4 +577,16 @@ export interface IAllthingsRestClient {
    * Add new registratation code by utilisation period
    */
   readonly utilisationPeriodAddRegistrationCode: MethodUtilisationPeriodAddRegistrationCode
+
+  // Booking
+
+  /**
+   * Get a booking by its ID
+   */
+  readonly bookingGetById: MethodBookingGetById
+
+  /**
+   * Update a booking by its ID
+   */
+  readonly bookingUpdateById: MethodBookingUpdateById
 }

@@ -13,6 +13,7 @@ import httpDelete from './delete'
 import httpGet from './get'
 import { agentCreate, agentCreatePermissions } from './methods/agent'
 import { activeUnitsGetByAppId, appCreate, appGetById } from './methods/app'
+import { bookingGetById, bookingUpdateById } from './methods/booking'
 import {
   bucketAddFile,
   bucketCreate,
@@ -214,6 +215,10 @@ const API_METHODS: ReadonlyArray<any> = [
   utilisationPeriodCheckInUser,
   utilisationPeriodCheckOutUser,
   utilisationPeriodAddRegistrationCode,
+
+  // Bookings
+  bookingUpdateById,
+  bookingGetById,
 ]
 
 export {
@@ -233,9 +238,7 @@ export {
   api method function wrappers.
 */
 export default function restClient(
-  userOptions: Partial<
-    IAllthingsRestClientOptions
-  > = DEFAULT_API_WRAPPER_OPTIONS,
+  userOptions: Partial<IAllthingsRestClientOptions> = DEFAULT_API_WRAPPER_OPTIONS,
 ): IAllthingsRestClient {
   const options: IAllthingsRestClientOptions = {
     ...DEFAULT_API_WRAPPER_OPTIONS,
