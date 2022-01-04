@@ -55,6 +55,7 @@ services:
       - SYMFONY__MONGODB__DBNAME=qipp_core_dev
       - SYMFONY__ASSETS__BASE__URL=https://assets.dev.allthings.me/
       - SYMFONY__MAX__LOGIN__ATTEMPTS=999999999999
+      - SYMFONY__AWS__S3__REGION=eu-west-1
   accounts:
     image: allthings/accounts
     volumes:

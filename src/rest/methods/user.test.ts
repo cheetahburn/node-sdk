@@ -393,7 +393,7 @@ describe('userChangePassword()', () => {
       client.userChangePassword(
         user.id,
         'not-current-password',
-        'foobar-password',
+        'foobar-password-long-enough-to-make-the-api-happy',
       ),
     ).rejects.toThrow()
   })

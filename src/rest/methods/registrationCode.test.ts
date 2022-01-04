@@ -14,6 +14,7 @@ beforeAll(async () => {
   const name = `Registration Code ${pseudoRandomString()}`
   const app = await client.appCreate(USER_ID, {
     name,
+    notificationsEmailAddress: 'support@allthings.me',
     siteUrl: `https://${pseudoRandomString(32)}.info`,
   })
 
@@ -45,7 +46,7 @@ beforeAll(async () => {
         startDate: '2018-03-01',
       }),
     ])
-  ).map(item => item.id)
+  ).map((item) => item.id)
 })
 
 describe('registrationCodeCreate()', () => {

@@ -102,6 +102,7 @@ describe('Rest API Client', () => {
     await expect(
       client.appCreate('foobar', {
         name: 'foobar',
+        notificationsEmailAddress: 'support@allthings.me',
         siteUrl: `https://${pseudoRandomString(32)}.info`,
       }),
     ).rejects.toThrow('Unable to get OAuth2 access token')

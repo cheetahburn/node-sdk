@@ -19,6 +19,7 @@ export type MethodAppCreate = (
   data: PartialApp & {
     readonly name: string
     readonly siteUrl: string
+    readonly notificationsEmailAddress: string
   },
 ) => CreateAppResult
 
@@ -29,6 +30,7 @@ export async function appCreate(
   data: PartialApp & {
     readonly name: string
     readonly siteUrl: string
+    readonly notificationsEmailAddress: string
   },
 ): CreateAppResult {
   return client.post(`/v1/users/${userId}/apps`, {

@@ -9,6 +9,7 @@ describe('appCreate()', () => {
   it('should create a new App', async () => {
     const result = await client.appCreate(USER_ID, {
       name: pseudoRandomString(32),
+      notificationsEmailAddress: 'support@allthings.me',
       siteUrl: `https://${pseudoRandomString(32)}.info`,
     })
 
@@ -33,6 +34,7 @@ describe('activeUnitsGetByAppId()', () => {
 
     const cleanApp = await client.appCreate(USER_ID, {
       name: pseudoRandomString(32),
+      notificationsEmailAddress: 'support@allthings.me',
       siteUrl: `https://${pseudoRandomString(32)}.info`,
     })
     const appWithNoUnits = await client.activeUnitsGetByAppId(cleanApp.id)
