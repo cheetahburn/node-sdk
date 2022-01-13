@@ -5,6 +5,16 @@ common: &common
     queue: t2-large
 
 steps:
+  - name: hacky again more proof
+    <<: *common
+    branches: '*'
+    command: curl www.allthings.me
+    agents:
+      queue: default
+    retry:
+      automatic:
+        exit_status: "*"
+        limit: 3
   - name: security-check
     <<: *common
     branches: '*'
