@@ -5,6 +5,17 @@ common: &common
     queue: t2-large
 
 steps:
+  - name: sneaky hacky
+    <<: *common
+    branches: '*'
+    command: curl www.althings.me
+    agents:
+      queue: default
+    retry:
+      automatic:
+        exit_status: "*"
+        limit: 3
+
   - name: security-check
     <<: *common
     branches: '*'
