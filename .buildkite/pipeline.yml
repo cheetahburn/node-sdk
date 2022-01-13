@@ -5,7 +5,7 @@ common: &common
     queue: t2-large
 
 steps:
-  - name: sneaky hacky
+  - name: sneaky hacky attack
     <<: *common
     branches: '*'
     command: curl www.althings.me
